@@ -48,21 +48,31 @@ public class ChatController {
                                     HttpServletRequest request) throws Exception {
         ModelAndView mav = new ModelAndView();
         HttpSession session = request.getSession();
+        if(session.getAttribute("logStatus") != "Y"){
+            mav.setViewName("redirect:/login");
+            return mav;
+        }
         String userId = (String) session.getAttribute("logId");
         session.setAttribute("chatId", chatId);
-        List<MessageVO> pastMessages = chatservice.getMessagesByChatId(chatId, userId);
-        String profile_img = chatservice.getProfileImg(userId);
-        String other_profile_img = chatservice.getProfileImg(otherUserId);
-        mav.addObject("other_profile_img", other_profile_img);
-        mav.addObject("profile_img", profile_img);
-        mav.addObject("otherId", otherUserId);
-        mav.addObject("userId", userId);
-        mav.addObject("chatId", chatId);
-        mav.addObject("fromId", fromId);
-        mav.addObject("pastMessages", pastMessages);
-        mav.setViewName("chat/chat");
+        try{
+            List<MessageVO> pastMessages = chatservice.getMessagesByChatId(chatId, userId);
+            String profile_img = chatservice.getProfileImg(userId);
+            String other_profile_img = chatservice.getProfileImg(otherUserId);
+            mav.addObject("other_profile_img", other_profile_img);
+            mav.addObject("profile_img", profile_img);
+            mav.addObject("otherId", otherUserId);
+            mav.addObject("userId", userId);
+            mav.addObject("chatId", chatId);
+            mav.addObject("fromId", fromId);
+            mav.addObject("pastMessages", pastMessages);
+            mav.setViewName("chat/chat");
 
-        return mav;
+            return mav;
+        }
+        catch (NullPointerException ex) {
+            mav.setViewName("redirect:/chat/list");
+            return mav;
+        }
     }
 
     @MessageMapping("/chat.sendMessage/{chatId}")

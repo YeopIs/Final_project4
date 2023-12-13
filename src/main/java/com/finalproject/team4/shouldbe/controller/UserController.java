@@ -40,6 +40,9 @@ public class UserController {
 
     @GetMapping("/create")
     public String create_membership(HttpSession session) {
+        if (session.getAttribute("logStatus") == "Y") {
+            return "redirect:/";
+        }
         session.invalidate();//회원가입중 새로고침시 인증정보 날리기
         return "create_membership/create_membership";
     }
@@ -138,36 +141,58 @@ public class UserController {
                           RedirectAttributes redirect) {
         LoginVO vo = userService.userLoginCheck(userid);
         System.out.println(vo);
-
         if (vo == null) {//로그인 실패
+            System.out.println(1);
             redirect.addFlashAttribute("result", "로그인 실패, 아이디를 확인해주세요!");
             return "redirect:/login";
         } else if (vo.getWithdraw()!= null) {
+            System.out.println(2);
             redirect.addFlashAttribute("result", "탈퇴 예정 회원입니다. 탈퇴를 취소하고 싶다면 문의해주세요.");
             return "redirect:/login";
-        } else  if (vo.getSuspended_time() != null) {
+        } else if (vo.getSuspended_time() != null) {
+            System.out.println(3);
             Date now = new Date();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(vo.getSuspended_time());
             calendar.add(Calendar.DAY_OF_MONTH, vo.getSuspended_period());
             vo.setSuspended_time(calendar.getTime());
             if(vo.getSuspended_time().after(now)) {
+                System.out.println(4);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 String d = dateFormat.format(vo.getSuspended_time());
                 redirect.addFlashAttribute("result", "정지 회원입니다. " + d + " 이후에 로그인이 가능합니다.");
                 return "redirect:/login";
             }
+            else if(encrypt.encrypt(userpwd, vo.getSalt()).equals(vo.getPassword())) {
+                System.out.println(encrypt.encrypt(userpwd, vo.getSalt()));
+                System.out.println(vo.getPassword());
+                userService.logUser(userid);
+                session.setAttribute("logStatus", "Y");
+                session.setAttribute("logName", vo.getUser_name());
+                session.setAttribute("logId", userid);
+                if(userService.ismanager(userid)){
+                    session.setAttribute("manager","Y");
+                    return "redirect:/admin/";
+                }else{
+                    return "redirect:/";
+                }
+            }
         } else if (encrypt.encrypt(userpwd, vo.getSalt()).equals(vo.getPassword())) {
+            System.out.println(encrypt.encrypt(userpwd, vo.getSalt()));
+            System.out.println(vo.getPassword());
             userService.logUser(userid);
             session.setAttribute("logStatus", "Y");
             session.setAttribute("logName", vo.getUser_name());
             session.setAttribute("logId", userid);
             if(userService.ismanager(userid)){
+                session.setAttribute("manager","Y");
                 return "redirect:/admin/";
             }else{
                 return "redirect:/";
             }
         }
+        System.out.println(encrypt.encrypt(userpwd, vo.getSalt()));
+        System.out.println(vo.getPassword());
         redirect.addFlashAttribute("result", "로그인 실패, 비밀번호를 확인해주세요!");
         return "redirect:/login";
 
@@ -175,12 +200,18 @@ public class UserController {
 
 
     @GetMapping("/login/findid")
-    public String find_id() {
+    public String find_id(HttpSession session) {
+        if (session.getAttribute("logStatus") == "Y") {
+            return "redirect:/";
+        }
         return "login/find_id";
     }
 
     @GetMapping("/login/findpwd")
-    public String find_pwd() {
+    public String find_pwd(HttpSession session) {
+        if (session.getAttribute("logStatus") == "Y") {
+            return "redirect:/";
+        }
         return "login/find_pwd";
     }
 
@@ -195,7 +226,6 @@ public class UserController {
     @PostMapping("/login/sendcode")
     @ResponseBody
     public boolean sendCode(@RequestParam("userid") String userid, @RequestParam("email") String email, HttpSession session) {
-
 
         int result = userService.userCheckId(userid, email);
         //System.out.println(result);

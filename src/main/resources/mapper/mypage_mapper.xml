@@ -14,10 +14,13 @@
     </select>
 
     <update id="mypage_edit">
-        update users
-        set profile_content=#{profile_content}, lang=#{lang}
-        where user_id = #{user_id};
+        UPDATE users
+        SET profile_content = #{profile_content},
+        lang = #{lang},
+        password = #{password}
+        WHERE user_id = #{user_id};
     </update>
+
 
     <select id="mypage_post_board" resultType="BoardVO">
         select post_id, user_id, title, board_cat,date_format(write_date, '%y-%m-%d') write_date

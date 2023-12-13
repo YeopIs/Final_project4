@@ -293,9 +293,11 @@
                                     <input type="button" value="계정정지" class="btn btn-dark suspend_btn">
                                 </a>
                             </td>
-                            <a href="${pageContext.servletContext.contextPath}/commentDelete?comment_report_id=${arVO.comment_report_id}">
-                                <td class="del_button"><input type="button" value="신고 취소" class="btn btn-dark"></td>
-                            </a>
+                                <td class="del_button">
+                                    <a href="${pageContext.servletContext.contextPath}/commentDelete?comment_report_id=${arVO.comment_report_id}">
+                                        <input type="button" value="신고 취소" class="btn btn-dark">
+                                    </a>
+                                </td>
                         </tr>
                     </c:forEach>
                 </tbody>

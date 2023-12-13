@@ -199,4 +199,10 @@
     <delete id="deleteChatAndRelatedData">
         DELETE FROM chat_list WHERE chat_id = #{chatId};
     </delete>
+
+    <update id="updateUserReport">
+        UPDATE users
+        SET count_report = count_report + 1
+        WHERE user_id = #{other_id}
+    </update>
 </mapper>

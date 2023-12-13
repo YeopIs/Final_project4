@@ -241,8 +241,8 @@
                     <th class="user_name">닉네임</th>
                     <th class="user_id">아이디</th>
                     <th class="time">정지일</th>
+                    <th> 정지기간</th>
                     <th class="suspend_reason">정지사유</th>
-                    <th class="writing_count">작성글/댓글 수</th>
                     <th class="report_count">신고횟수</th>
                     <th class="suspend_button">정지 해제</th>
                 </tr>
@@ -253,8 +253,8 @@
                         <td class="user_name">${asVO.user_name}</td>
                         <td class="user_id">${asVO.user_id}</td>
                         <td class="time">${asVO.suspended_time}</td>
+                        <td> ${asVO.suspended_period}</td>
                         <td class="suspend_reason">${asVO.reason}</td>
-                        <td class="writing_count">${asVO.posts_count}/${asVO.comments_count}</td>
                         <td class="report_count">${asVO.count_report}</td>
                         <td class="unsuspend_button">
                             <a href="${pageContext.servletContext.contextPath}/suspendDelete?suspended_id=${asVO.suspended_id}">

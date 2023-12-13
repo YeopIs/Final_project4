@@ -82,16 +82,14 @@
         FROM suspended_users
     </select>
     <select id="adminSuspendedList" resultType="AdminMemberVO">
-        select suspended_id, user_id, suspended_time, suspended_period, reason
-        from suspended_users
-        ORDER BY suspended_time
+        SELECT su.suspended_id, su.user_id, su.suspended_time, su.suspended_period, su.reason,
+               u.user_name, u.count_report
+        FROM suspended_users su
+                 JOIN users u ON su.user_id = u.user_id
+        WHERE DATE_ADD(su.suspended_time, INTERVAL su.suspended_period DAY) > CURDATE()
+        ORDER BY DATE_ADD(su.suspended_time, INTERVAL su.suspended_period DAY)
             LIMIT #{pvo.offsetPoint}, #{pvo.onePageRecord}
     </select>
-    <select id="getUserVO" resultType="AdminMemberVO">
-        select profile_img,user_name,count_report
-        from users where user_id=#{user_id}
-    </select>
-
 
     <!--//정지회원관리_정지버튼====================================================== -->
     <insert id="suspendInsert">
@@ -155,7 +153,7 @@
         SELECT COUNT(*)
         FROM comment_report
     </select>
-    <select id="selectBoardReply" parameterType="map" resultType="com.finalproject.team4.shouldbe.vo.AdminCommentReportVO">
+    <select id="selectBoardReply" parameterType="map" resultType="AdminCommentReportVO">
         SELECT cr.*, c.post_id
         FROM comment_report cr
                  INNER JOIN comments c ON cr.comment_id = c.comment_id
@@ -234,7 +232,31 @@
     <delete id="messageReportDelete">
         delete from message_report where message_report_id=${report_id}
     </delete>
+    <select id="selectUserIdForMessageReport" resultType="String">
+        SELECT user_id
+        FROM message_report
+        WHERE message_report_id = #{message_report_id}
+    </select>
+    <delete id="messageReportDelete2">
+        delete from message_report where message_report_id=${message_report_id}
+    </delete>
+    <update id="decrementCountReport">
+        UPDATE users
+        SET count_report = count_report - 1
+        WHERE user_id = #{user_id}
+    </update>
 
+    <select id="selectUserIdForBoardReport" resultType="String">
+        SELECT user_id
+        FROM post_report
+        WHERE post_report_id = #{reportId}
+    </select>
+
+    <select id="selectUserIdForCommentReport" resultType="String">
+        SELECT user_id
+        FROM comment_report
+        WHERE comment_report_id = #{reportId}
+    </select>
 
 
 

@@ -145,6 +145,7 @@ public class ChatService {
     @Transactional
     public void blockUserAndUpdateChat(BlockRequest blockRequest) {
         chatMapper.insertBlockList(blockRequest.getUserId(),blockRequest.getOtherId(),blockRequest.getReason());
+        chatMapper.updateUserReport(blockRequest.getOtherId());
         System.out.println("1");
         chatMapper.friendDelete(blockRequest.getUserId(),blockRequest.getOtherId());
         System.out.println("2");

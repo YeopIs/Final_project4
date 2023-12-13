@@ -158,13 +158,19 @@
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="pwd" class="col-sm-2 col-form-label">비밀번호</label>
+                <label for="pwd" class="col-sm-2 col-form-label">기존 비밀번호</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" placeholder="Enter password" name="now_password">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="pwd" class="col-sm-2 col-form-label">새 비밀번호</label>
                 <div class="col-sm-10">
                     <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="pwd-confirm" class="col-sm-2 col-form-label">비밀번호확인</label>
+                <label for="pwd-confirm" class="col-sm-2 col-form-label">새 비밀번호 확인</label>
                 <div class="col-sm-10">
                     <input type="password" class="form-control" id="pwd-confirm" placeholder="Confirm password"
                            name="pwd-confirm">

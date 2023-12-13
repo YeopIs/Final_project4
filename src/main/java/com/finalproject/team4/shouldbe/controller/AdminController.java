@@ -33,8 +33,8 @@ public class AdminController {
     @GetMapping("/admin")
     public ModelAndView admin(HttpSession session) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId"))){
-            mav.setViewName("/");
+        if(! userService.ismanager((String) session.getAttribute("logId"))||session.getAttribute("logStatus") != "Y"){
+            mav.setViewName("redirect:/");
             return mav;
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -52,7 +52,7 @@ public class AdminController {
     public ModelAndView GoMember_management(@RequestParam(required = false, defaultValue = "1") int page,
                                             HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId"))){
+        if(! userService.ismanager((String) session.getAttribute("logId"))||session.getAttribute("logStatus") != "Y"){
             mav.setViewName("/");
             return mav;
         }
@@ -79,8 +79,8 @@ public class AdminController {
     public ModelAndView GoSuspended_management(@RequestParam(required = false, defaultValue = "1") int page,
                                                HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId"))){
-            mav.setViewName("/");
+        if(! userService.ismanager((String) session.getAttribute("logId"))|| session.getAttribute("logStatus") != "Y"){
+            mav.setViewName("redirect:/");
             return mav;
         }
         PagingVO pvo = new PagingVO();
@@ -88,16 +88,6 @@ public class AdminController {
         pvo.setNowPage(page);
         pvo.setTotalRecord(service.totalSuspendedMemberRecord());
         List<AdminMemberVO> aslist = service.adminSuspendedList(pvo);
-        for(int i=0;i<aslist.size();i++){
-            String user_id=aslist.get(i).getUser_id();
-            AdminMemberVO userVO=service.getUserVO(user_id);
-            System.out.println("a "+userVO.getUser_name());
-            aslist.get(i).setProfile_img(userVO.getProfile_img());
-            aslist.get(i).setUser_name(userVO.getUser_name());
-            aslist.get(i).setCount_report(userVO.getCount_report());
-            aslist.get(i).setPosts_count(service.postsCount(user_id));
-            aslist.get(i).setComments_count(service.commentsCount(user_id));
-        }
         mav.addObject("aslist", aslist);
         mav.addObject("pVO", pvo);
         mav.setViewName("management/suspended_management");
@@ -128,8 +118,8 @@ public class AdminController {
     public ModelAndView GoWithdrawn_management(@RequestParam(required = false, defaultValue = "1") int page,
                                                HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId"))){
-            mav.setViewName("/");
+        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+            mav.setViewName("redirect:/");
             return mav;
         }
         PagingVO pvo = new PagingVO();
@@ -176,8 +166,8 @@ public class AdminController {
     public ModelAndView admin_board(@RequestParam(required = false, defaultValue = "1") int page,
                                     HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId"))){
-            mav.setViewName("/");
+        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+            mav.setViewName("redirect:/");
             return mav;
         }
         PagingVO pvo = new PagingVO();
@@ -235,8 +225,8 @@ public class AdminController {
     public ModelAndView admin_reply(@RequestParam(required = false, defaultValue = "1") int page,
                                     HttpSession session) {
         ModelAndView mav = new ModelAndView("admin/admin_reply");
-        if(! userService.ismanager((String) session.getAttribute("logId"))){
-            mav.setViewName("/");
+        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+            mav.setViewName("redirect:/");
             return mav;
         }
         PagingVO pvo = new PagingVO();
@@ -282,8 +272,8 @@ public class AdminController {
     @GetMapping("/admin/quiz/list")
     public ModelAndView GoQuiz_list(HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId"))){
-            mav.setViewName("/");
+        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+            mav.setViewName("redirect:/");
             return mav;
         }
         mav.setViewName("quiz_management/quiz_list");
@@ -296,31 +286,15 @@ public class AdminController {
         mav.addObject("quizlist3", quizlist3);
         return mav;
     }
-    //퀴즈관리_퀴즈등록페이지버튼
-    @GetMapping("/admin/quiz/reg_manager")
-    public String GoQuiz_reg_manager() {
-        return "quiz_management/quiz_reg_manager";
-    }
-    //퀴즈관리_퀴즈등록버튼
-    @PostMapping("/quiz/reg")
-    public ModelAndView QuizReg(String quiz_content, String answer, int level,String answer_lang){
-        ModelAndView mav= new ModelAndView();
-        int quizInsertResult=service.quizInsert(quiz_content,level);
-        int quiz_id=service.selectQuizId(quiz_content);
-        int answerInsertResult=service.answerInsert(quiz_id,answer, answer_lang);
-        // System.out.println(quiz_content+" "+level);
-        mav.setViewName("quiz_management/quiz_list");
-        return mav;
-    }
-    //퀴즈관리_유저퀴즈등록버튼
-    @GetMapping("/admin/quiz/reg_user")
-    public String GoQuiz_reg_user() {
-        return "quiz_management/quiz_reg_user";
-    }
+
     //퀴즈관리_등록된 퀴즈 리스트
     @GetMapping("/admin/quiz_edit")
-    public ModelAndView GoQuiz_edit(int quiz_id) {
+    public ModelAndView GoQuiz_edit(int quiz_id, HttpSession session) {
         ModelAndView mav = new ModelAndView();
+        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+            mav.setViewName("redirect:/");
+            return mav;
+        }
         QuizVO qVO=service.quiz_table(quiz_id);
         List<QuizVO> editlist=service.editlist(quiz_id);
         System.out.println(editlist.toString());
@@ -363,7 +337,7 @@ public class AdminController {
                                           HttpSession session) {
         ModelAndView mav = new ModelAndView();
         if(! userService.ismanager((String) session.getAttribute("logId"))){
-            mav.setViewName("/");
+            mav.setViewName("redirect:/");
             return mav;
         }
         PagingVO pvo = new PagingVO();
@@ -387,7 +361,13 @@ public class AdminController {
         return mav;
     }
 
-
+    @GetMapping("/chatDelete")
+    public ModelAndView chatDelete(int message_report_id) {
+        ModelAndView mav = new ModelAndView();
+        service.messageReportDelete2(message_report_id);
+        mav.setViewName("redirect:/admin/board");
+        return mav;
+    }
 
 
 

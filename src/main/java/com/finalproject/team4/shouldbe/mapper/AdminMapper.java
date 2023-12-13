@@ -22,7 +22,6 @@ public interface AdminMapper {
     //정지회원관리======================================================
     int countSuspendedMember();
     List<AdminMemberVO> adminSuspendedList(@Param("pvo") PagingVO pvo);
-    AdminMemberVO getUserVO(String user_id);
 
 
     //정지회원관리_정지버튼======================================================
@@ -78,6 +77,16 @@ public interface AdminMapper {
     int countMessage();
     List<AdminChatVO> adminChatList(@Param("pvo") PagingVO pvo);
     void messageReportDelete(int report_id);
+
+    void messageReportDelete2(int messageReportId);
+
+    String selectUserIdForMessageReport(int messageReportId);
+
+    void decrementCountReport(String userId);
+
+    String selectUserIdForCommentReport(int reportId);
+
+    String selectUserIdForBoardReport(int reportId);
 
 
 

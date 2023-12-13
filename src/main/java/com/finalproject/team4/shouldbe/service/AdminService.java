@@ -19,7 +19,6 @@ public interface AdminService {
     //정지회원관리======================================================
     int totalSuspendedMemberRecord();
     List<AdminMemberVO> adminSuspendedList(PagingVO pvo);
-    AdminMemberVO getUserVO(String user_id);
 
     //정지회원관리_정지버튼
     int suspendInsert(String user_id,int time,String reason);
@@ -62,6 +61,7 @@ public interface AdminService {
     int totalMessageRecord();
     List<AdminChatVO> adminChatList(PagingVO pvo);
     void messageReportDelete(int report_id);
+    void messageReportDelete2(int messageReportId);
 
     //List<BoardVO> getBoardList_admin(PagingVO pvo);
     //List<MessageVO> getMessageList_admin(PagingVO pvo);

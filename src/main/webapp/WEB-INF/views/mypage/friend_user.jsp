@@ -163,8 +163,8 @@
                     <p>${flist.profile_content}</p>
                 </div>
                 <div>
-                    <a id="gochat_btn" href="${pageContext.request.contextPath}/chat?chat_id=${flist.chat_id}&other_user_id=${
-                    flist.following_user_id}&from_id=${flist.followed_user_id}">
+                    <a href="${pageContext.request.contextPath}/chat?chat_id=${flist.chat_id}&other_user_id=${
+                    flist.following_user_id}&from_id=${flist.from_id}" id="gochat_btn">
                         <button type="button" class="btn btn-warning btn-action">채팅하기</button>
                     </a>
                     <button type="button" class="btn btn-outline-secondary btn-action" id="deletefriend"

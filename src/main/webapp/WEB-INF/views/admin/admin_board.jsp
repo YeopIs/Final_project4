@@ -163,6 +163,7 @@
             text-overflow: ellipsis;
             margin: 80px ;
             padding:10px;
+            text-align: center;
         }
 
         .board_title> a{

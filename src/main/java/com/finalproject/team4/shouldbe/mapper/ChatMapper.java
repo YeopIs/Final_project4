@@ -69,4 +69,6 @@ public interface ChatMapper {
     void createChatRoomState(int chatId);
 
     int saveMessageToMypageCheck(String userId, int msgId);
+
+    void updateUserReport(String otherId);
 }

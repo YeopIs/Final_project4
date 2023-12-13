@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,5 +21,5 @@ public class AdminMemberVO {
     private String reason;
     private String suspended_period;
     private String withdrawn_time;
-    private String suspended_time;
+    private Date suspended_time;
 }

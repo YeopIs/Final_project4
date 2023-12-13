@@ -1,6 +1,7 @@
 package com.finalproject.team4.shouldbe.service;
 
 import com.finalproject.team4.shouldbe.mapper.BoardMapper;
+import com.finalproject.team4.shouldbe.mapper.ChatMapper;
 import com.finalproject.team4.shouldbe.vo.BoardVO;
 import com.finalproject.team4.shouldbe.vo.PagingVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class BoardServiceImpl implements BoardService {
     @Autowired
     BoardMapper Mapper;
 
+    @Autowired
+    ChatMapper chatMapper;
 
     @Override
     public int boardInsert(BoardVO vo) {
@@ -67,6 +70,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public int report(int post_id, String userId) {
+        chatMapper.updateUserReport(userId);
         return Mapper.report(post_id, userId);
     }
 

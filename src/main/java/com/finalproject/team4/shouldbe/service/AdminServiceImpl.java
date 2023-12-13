@@ -56,8 +56,6 @@ public class AdminServiceImpl implements AdminService {
     public List<AdminMemberVO> adminSuspendedList(PagingVO pvo) {
         return mapper.adminSuspendedList(pvo);
     }
-    @Override
-    public AdminMemberVO getUserVO(String user_id){return mapper.getUserVO(user_id);}
 
 
     //정지회원관리_정지버튼======================================================
@@ -99,7 +97,9 @@ public class AdminServiceImpl implements AdminService {
     public BoardReportVO getPostsVO( int post_id){return mapper.getPostsVO(post_id);}
     @Override
     public void boardReportDelete(int report_id){
+        String userId = mapper.selectUserIdForBoardReport(report_id);
         mapper.boardReportDelete(report_id);
+        mapper.decrementCountReport(userId);
     }
 
 
@@ -120,7 +120,9 @@ public class AdminServiceImpl implements AdminService {
     }
     @Override
     public void commentReportDelete(int reportId){
+        String userId = mapper.selectUserIdForCommentReport(reportId);
         mapper.commentReportDelete(reportId);
+        mapper.decrementCountReport(userId);
     }
     //퀴즈관리======================================================
     @Override
@@ -166,7 +168,12 @@ public class AdminServiceImpl implements AdminService {
         mapper.messageReportDelete(report_id);
     }
 
-
+    @Override
+    public void messageReportDelete2(int messageReportId){
+        String userId = mapper.selectUserIdForMessageReport(messageReportId);
+        mapper.messageReportDelete2(messageReportId);
+        mapper.decrementCountReport(userId);
+    }
 
    /* @Override
    public List<BoardVO> getBoardList_admin(PagingVO pvo) {

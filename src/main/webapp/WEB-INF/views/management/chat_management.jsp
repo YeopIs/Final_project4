@@ -79,15 +79,16 @@
         }
 
         #member_management {
-            height: auto;
             width: 900px;
+            height: auto;
             margin: 50px auto;
+            display: flex;
+            flex-direction: column;
 
         }
 
         #quiz_list_title {
             text-align: center;
-            padding-bottom: 20px;
         }
 
         /*#quiz_grade{
@@ -103,23 +104,36 @@
             border-bottom: 4px solid #000;
         }
 
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
+            color: black;
+            text-decoration: none;
+        }
+
         .management_list th {
-            width: 150px;
             height: 50px;
             line-height: 50px;
+            text-align: center;
         }
 
         .management_list td {
-            width: 150px;
-            height: 80px;
+            padding: 0 10px;
+            height: 75px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: center;
         }
 
         #list_content {
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #000000;
         }
 
         .management_list .chat_content {
             width: 40%;
+            text-align: center;
         }
 
         #side_menu li a.active{
@@ -254,11 +268,12 @@
                     <th class="chat_content">채팅 내용</th>
                     <th class="report_count">신고일</th>
                     <th class="suspend_button">계정 정지</th>
+                    <th class="delete_button">신고 취소</th>
                 </tr>
                 </thead>
                 <tbody id="list_content">
                 <c:forEach var="acVO" items="${aclist}">
-                    <tr class="tr_list">
+                    <tr class="tr_list" style="text-align: center;">
                         <td class="reported_id">${acVO.user_id}</td>
                         <td class="chat_content">
                             <div class="origin">
@@ -272,6 +287,11 @@
                                 <input id="msg_report_id" name="report_id" type="hidden" value="${acVO.message_report_id}">
                                 <input id="btn_userid" name="user_id" type="hidden" value="${acVO.user_id}">
                                 <input type="button" value="계정정지" class="btn btn-dark suspend_btn">
+                            </a>
+                        </td>
+                        <td class="delete_button">
+                            <a href="${pageContext.servletContext.contextPath}/chatDelete?message_report_id=${acVO.message_report_id}">
+                                <input type="button" value="신고 취소" class="btn btn-dark">
                             </a>
                         </td>
                     </tr>

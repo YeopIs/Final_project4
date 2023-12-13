@@ -46,8 +46,6 @@ public class BoardReplyController {
                 map.put("result", true);
                 return map;
             }
-
-
         }
         map.put("result", false);
         return map;

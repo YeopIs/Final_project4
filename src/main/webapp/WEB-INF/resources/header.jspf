@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="${pageContext.servletContext.contextPath}/js/no-cache.js"></script>
     <link rel="shortcut icon" href="https://ibsintelligence.com/wp-content/uploads/2023/05/Smoothpay.jpg">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Titillium+Web&family=ZCOOL+XiaoWei&display=swap');
@@ -150,7 +151,7 @@
     <div class="category">
         <!-- 마이페이지 Dropdown -->
         <div class="dropdown">
-            <a href="${pageContext.servletContext.contextPath}/mypage" class="dropbtn">MY PAGE</a>
+            <a href="${pageContext.servletContext.contextPath}/mypage/change_user" class="dropbtn">MY PAGE</a>
             <c:if test="${logStatus=='Y'}">
                 <div class="dropdown-content">
                     <a href="${pageContext.servletContext.contextPath}/mypage/change_user">INFO EDIT</a>
@@ -189,6 +190,21 @@
                 <a href="${pageContext.servletContext.contextPath}/chat/partners">NEW PARTNER</a>
             </div>
         </div>
+        <c:if test="${manager=='Y'}">
+            <div class="dropdown">
+                <a href="${pageContext.servletContext.contextPath}/admin" class="dropbtn">ADMIN</a>
+                <div class="dropdown-content">
+                    <a href="${pageContext.servletContext.contextPath}/admin">DASH BOARD</a>
+                    <a href="${pageContext.servletContext.contextPath}/admin/member/management">NOW USER</a>
+                    <a href="${pageContext.servletContext.contextPath}/admin/suspended/management">SUSPENDED</a>
+                    <a href="${pageContext.servletContext.contextPath}/admin/withdrawn/management">WITHDRAWN</a>
+                    <a href="${pageContext.servletContext.contextPath}/admin/board">POST</a>
+                    <a href="${pageContext.servletContext.contextPath}/admin/reply">COMMENT</a>
+                    <a href="${pageContext.servletContext.contextPath}/admin/quiz/list">QUIZ</a>
+                    <a href="${pageContext.servletContext.contextPath}/admin/chat/management">CHAT</a>
+                </div>
+            </div>
+        </c:if>
     </div>
 </div>
 <hr style="margin-bottom: 0;">
