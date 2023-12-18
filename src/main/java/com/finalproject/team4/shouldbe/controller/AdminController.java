@@ -79,7 +79,7 @@ public class AdminController {
     public ModelAndView GoSuspended_management(@RequestParam(required = false, defaultValue = "1") int page,
                                                HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId"))|| session.getAttribute("logStatus") != "Y"){
+        if (!"Y".equals(session.getAttribute("manager")) || !"Y".equals(session.getAttribute("logStatus"))) {
             mav.setViewName("redirect:/");
             return mav;
         }
@@ -87,7 +87,9 @@ public class AdminController {
         pvo.setOnePageRecord(10);
         pvo.setNowPage(page);
         pvo.setTotalRecord(service.totalSuspendedMemberRecord());
+        System.out.println(pvo);
         List<AdminMemberVO> aslist = service.adminSuspendedList(pvo);
+        System.out.println(aslist);
         mav.addObject("aslist", aslist);
         mav.addObject("pVO", pvo);
         mav.setViewName("management/suspended_management");
@@ -118,7 +120,7 @@ public class AdminController {
     public ModelAndView GoWithdrawn_management(@RequestParam(required = false, defaultValue = "1") int page,
                                                HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+        if (!"Y".equals(session.getAttribute("manager")) || !"Y".equals(session.getAttribute("logStatus"))) {
             mav.setViewName("redirect:/");
             return mav;
         }
@@ -166,7 +168,7 @@ public class AdminController {
     public ModelAndView admin_board(@RequestParam(required = false, defaultValue = "1") int page,
                                     HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+        if (!"Y".equals(session.getAttribute("manager")) || !"Y".equals(session.getAttribute("logStatus"))) {
             mav.setViewName("redirect:/");
             return mav;
         }
@@ -225,7 +227,7 @@ public class AdminController {
     public ModelAndView admin_reply(@RequestParam(required = false, defaultValue = "1") int page,
                                     HttpSession session) {
         ModelAndView mav = new ModelAndView("admin/admin_reply");
-        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+        if (!"Y".equals(session.getAttribute("manager")) || !"Y".equals(session.getAttribute("logStatus"))) {
             mav.setViewName("redirect:/");
             return mav;
         }
@@ -272,7 +274,7 @@ public class AdminController {
     @GetMapping("/admin/quiz/list")
     public ModelAndView GoQuiz_list(HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+        if (!"Y".equals(session.getAttribute("manager")) || !"Y".equals(session.getAttribute("logStatus"))) {
             mav.setViewName("redirect:/");
             return mav;
         }
@@ -291,7 +293,7 @@ public class AdminController {
     @GetMapping("/admin/quiz_edit")
     public ModelAndView GoQuiz_edit(int quiz_id, HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId")) || session.getAttribute("logStatus") != "Y"){
+        if (!"Y".equals(session.getAttribute("manager")) || !"Y".equals(session.getAttribute("logStatus"))) {
             mav.setViewName("redirect:/");
             return mav;
         }
@@ -336,7 +338,7 @@ public class AdminController {
     public ModelAndView GoChat_management(@RequestParam(required = false, defaultValue = "1") int page,
                                           HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        if(! userService.ismanager((String) session.getAttribute("logId"))){
+        if (!"Y".equals(session.getAttribute("manager")) || !"Y".equals(session.getAttribute("logStatus"))) {
             mav.setViewName("redirect:/");
             return mav;
         }
@@ -368,15 +370,5 @@ public class AdminController {
         mav.setViewName("redirect:/admin/board");
         return mav;
     }
-
-
-
-
-
-
-
-
-
-
 
 }

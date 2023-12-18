@@ -257,7 +257,7 @@
     <div class="chat-container">
         <div class="chat-header">
             <button class="follow-btn">Follow ${otherId}</button>
-            <h2>${otherId}님과의 채팅방</h2>
+            <h2>CHATTING WITH ${otherId}</h2>
             <button class="report-leave-btn">Block/Leave Chat</button>
         </div>
         <ul id="messageArea">

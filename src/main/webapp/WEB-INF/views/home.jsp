@@ -334,8 +334,8 @@
     <div class="banner_img"><!--a href="#;" -->
         <img src="/image/img_main_1.jpg" alt=" 배경">
         <p class="hover_text">
-            소통과 학습<br/>
-            쇼드비에 오신걸 환영합니다.
+            Communication and learning<br/>
+            Welcome to Should be
         </p>
     </div>
     <!--메인 이미지 끝-->
@@ -386,36 +386,36 @@
     <div id="intro-box">
         <div class="intro">
             <img id="intro_phone" src="../../image/main/chat.png">
-            <p>실시간 채팅으로 원어민과 대화해요!</p>
+            <p>Talk to native speakers through real-time chat!</p>
         </div>
         <div class="intro">
-            <p>다양한 언어를 배워봐요!</p>
+            <p>Learn different languages!</p>
             <img id="intro_map" src="../../image/main/map.png">
         </div>
         <div class="intro">
             <img id="intro_laptop" src="../../image/main/community.png">
-            <p>다양한 사람들과 교류할 수 있어요!</p>
+            <p>You can interact with a variety of people!</p>
         </div>
     </div>
     <!--인트로 박스 끝 -->
 
     <!--셀렉트 버튼 시작------------------------------------------------------>
     <div class="select_box">
-        <a href="#;" class="box">
+        <a href="${pageContext.servletContext.contextPath}/mypage/" class="box">
             <img class="select_box_img" src="/image/img_selectbox_people.png">
-            <div class="select_box_text">마이<br/> 페이지</div>
+            <div class="select_box_text">MY<br/>PAGE</div>
         </a>
-        <a href="#;" class="box">
+        <a href="${pageContext.servletContext.contextPath}/board/notice" class="box">
             <img class="select_box_img" src="/image/img_selectbox_board.png">
-            <div class="select_box_text">게시판</div>
+            <div class="select_box_text">BOARD</div>
         </a>
-        <a href="#;" class="box">
+        <a href="${pageContext.servletContext.contextPath}/quiz/main" class="box">
             <img class="select_box_img" src="/image/img_selectbox_quiz.png">
-            <div class="select_box_text">퀴즈</div>
+            <div class="select_box_text">QUIZ</div>
         </a>
-        <a href="#;" class="box">
+        <a href="${pageContext.servletContext.contextPath}/chat/list" class="box">
             <img class="select_box_img" src="/image/img_selectbox_chat.png">
-            <div class="select_box_text">채팅</div>
+            <div class="select_box_text">CHAT</div>
         </a>
     </div>
     <!--셀렉트 버튼 끝-->

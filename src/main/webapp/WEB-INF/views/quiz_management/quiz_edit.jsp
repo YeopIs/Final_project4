@@ -46,13 +46,14 @@
         }
 
         .container {
-            margin-top:50px;
+            margin-top:30px;
             width: 1200px;
             height: auto;
             display: flex;
             flex-direction: row;
-            background-color: rgba(255, 255, 255, 0);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0);
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(30px);
         }
 
         #side_menu {

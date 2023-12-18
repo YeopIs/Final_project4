@@ -24,11 +24,15 @@ public class BoardReplyController {
 
     @GetMapping("/boardReply/list")
     @ResponseBody
-    public List<BoardReplyVO> replyList(int no){
+    public List<BoardReplyVO> replyList(int no,HttpSession session){
         //댓글 데이터
-        var rVOList = replyService.replyList(no);
+        String userId = (String) session.getAttribute("logId");
+        if (userId == null || userId.isEmpty()) {
+            userId = "not_login";
+        }
+        var rVOList = replyService.replyList(no,userId);
 
-        //System.out.println(rVOList);
+        System.out.println(rVOList);
         return rVOList;
     }
     @PostMapping("/boardReply/add")
@@ -50,13 +54,26 @@ public class BoardReplyController {
         map.put("result", false);
         return map;
     }
+
+    @PostMapping("/boardReply/reply")
+    @ResponseBody
+    public int replyReply(@RequestParam("post_id") int post_id,
+                                        @RequestParam("comment_id") int comment_id,
+                                        @RequestParam("content") String content,
+                                        HttpSession session){
+        String userId = (String)session.getAttribute("logId");
+        System.out.println(post_id+" "+comment_id+" "+content);
+        boolean updateStatus = replyService.addReplyReply(post_id, comment_id, userId, content);
+        return 1;
+    }
+
     @PostMapping("/boardReply/delete")
     @ResponseBody
     public Map<String, Object> deleteReply(HttpSession session, int replyNo, int postNo){
 
         var map = new HashMap<String, Object>();
         var reply = replyService.selectReply(postNo, replyNo);
-        if(reply.getWriter().equals((String)session.getAttribute("logId"))){
+        if(reply.getWriter().equals(session.getAttribute("logId"))){
             int result = replyService.deleteReply(postNo, replyNo);
             if(result>0) {
                 map.put("result", true);
@@ -92,15 +109,18 @@ public class BoardReplyController {
         var map = new HashMap<String, Object>();
         if("Y".equals(session.getAttribute("logStatus"))){
             var id = (String)session.getAttribute("logId");
-
             int result = replyService.like(no, id);
-            if(result>0){
+            if(result==0){
+                replyService.increaseLike(no,id);
                 map.put("result", true);
+                map.put("msg","좋아요를 눌렀습니다!");
+                return map;
+            } else {
+                replyService.decreaseLike(no, id);
+                map.put("result", false);
+                map.put("msg", "좋아요를 취소했습니다!");
                 return map;
             }
-            map.put("result", false);
-            map.put("msg", "이미 좋아요를 눌렀습니다!");
-
         }
         map.put("result", false);
         map.put("message", "로그인해주세요.");

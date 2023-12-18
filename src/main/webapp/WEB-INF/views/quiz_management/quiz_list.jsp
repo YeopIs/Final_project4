@@ -46,13 +46,14 @@
         }
 
         .container {
-            margin-top:50px;
+            margin-top:30px;
             width: 1200px;
             height: auto;
             display: flex;
             flex-direction: row;
-            background-color: rgba(255, 255, 255, 0);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0);
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(30px);
         }
         #side_menu {
             padding: 98px 10px 0;
@@ -248,6 +249,7 @@
         <div class="quiz_list">
             <!-- 쉬움 -->
             <div class="qqlist" id="quiz_easy">
+                <h4 style="text-align: center">쉬움</h4>
                 <table class="display" style="width:100%">
                     <thead class="list_head">
                     <tr class="management_list">
@@ -274,6 +276,7 @@
 
             <!-- 중간 -->
             <div class="qqlist" id="quiz_medium">
+                <h4 style="text-align: center">중간</h4>
                 <table class="display" style="width:100%">
                     <thead class="list_head">
                     <tr class="management_list">
@@ -300,6 +303,7 @@
 
             <!-- 어려움 -->
             <div class="qqlist" id="quiz_hard">
+                <h4 style="text-align: center">어려움</h4>
                 <table class="display" style="width:100%">
                     <thead class="list_head">
                     <tr class="management_list">

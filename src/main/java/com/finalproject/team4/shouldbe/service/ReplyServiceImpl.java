@@ -16,13 +16,14 @@ public class ReplyServiceImpl implements ReplyService {
     ChatMapper chatMapper;
 
     @Override
-    public List<BoardReplyVO> replyList(int post_id) {
-        return mapper.replyList(post_id);
+    public List<BoardReplyVO> replyList(int post_id, String logId) {
+        return mapper.replyList(post_id, logId);
     }
 
     @Override
     public int addReply(BoardReplyVO rVO) {
-        return mapper.addReply(rVO);
+        mapper.addReply(rVO);
+        return mapper.updateTargetParent(rVO);
     }
 
     @Override
@@ -45,7 +46,14 @@ public class ReplyServiceImpl implements ReplyService {
     public int like(int comment_id, String user_id) {
         return mapper.like(comment_id, user_id);
     }
-
+    @Override
+    public void decreaseLike(int comment_id, String user_id) {
+        mapper.decreaseLike(comment_id, user_id);
+    }
+    @Override
+    public void increaseLike(int comment_id, String user_id) {
+        mapper.increaseLike(comment_id, user_id);
+    }
     @Override
     public boolean updateComment(int postId, int commentId, String userId, String content) {
         try {
@@ -54,5 +62,9 @@ public class ReplyServiceImpl implements ReplyService {
         } catch (Exception e) {
             return false;
         }
+    }
+    @Override
+    public boolean addReplyReply(int postId, int commentId, String userId, String content){
+        return mapper.addReplyReply(postId,commentId,userId,content);
     }
 }

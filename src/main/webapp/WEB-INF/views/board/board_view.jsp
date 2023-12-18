@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>글 내용보기</title>
+    <title>BOARD : VIEW</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -85,14 +85,14 @@
             margin-bottom: 0;
         }
 
-        #replyForm, #replyFormEdit {
+        #replyForm, #replyFormEdit, #replyFormReply {
             width: 970px;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
-        #replyForm > div, #replyFormEdit>div {
+        #replyForm > div, #replyFormEdit > div, #replyFormReply > div {
             display: flex;
             justify-content: flex-end;
         }
@@ -150,6 +150,12 @@
             flex-direction: column;
         }
 
+        .comment-section-re {
+            display: flex;
+            flex-direction: column;
+            margin-left: 50px;
+        }
+
         .content-and-buttons {
             display: flex;
             align-items: center;
@@ -171,21 +177,21 @@
             cursor: pointer;
         }
 
-        #likeButton:hover {
-            background-color: #c8c8c8;
+        .likeButton {
+            font-size: 24px;
+            padding: 5px 10px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: rgba(255, 227, 160, 0.4);
         }
 
-        #liked {
-            margin-top: 10px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        #replyReport:hover, #replyLike:hover, #replyEdit:hover, #replyDelete:hover {
+        #replyReport:hover, #replyEdit:hover, #replyDelete:hover {
             color: #555555;
         }
 
-        #replyLike, #replyDelete {
+        #replyDelete {
             padding-left: 5px;
             padding-right: 5px;
             background-color: white;
@@ -195,9 +201,43 @@
             cursor: pointer;
         }
 
-        #reply
+        .active {
+            background-color: rgba(255, 227, 160);
+        }
+
+        .reply-button {
+            padding-left: 5px;
+            padding-right: 5px;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .reply-button.active {
+            background-color: rgba(255, 227, 160);
+        }
+
+        .reply-comment-id{
+            padding-right: 5px;
+        }
+
     </style>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                var myLike = '${bVO.myLike}';
+                if (myLike === '1') {
+                    var likeButton = document.getElementById('likeButton');
+                    if (likeButton) {
+                        likeButton.classList.add('active');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
         var currentCommentId = null;
         $(function () {
             $("#toList").click(function () {
@@ -207,8 +247,8 @@
                 location.href = "${pageContext.servletContext.contextPath}/board/${bVO.board_cat}/edit?no=${bVO.post_id}"
             })
             $("#deletePost").on('click', function () {
-                if (!confirm("정말 삭제하시겠습니까?")) {
-                    alert("취소 되었습니다.");
+                if (!confirm("Are you sure you want to delete?")) {
+                    alert("It has been cancelled.");
                 } else {
                     location.href = "/board/${bVO.board_cat}/delete?no=${bVO.post_id}";
 
@@ -223,31 +263,51 @@
                     type: 'GET',
                     success: function (result) {
                         //console.log(result);
-                        var tag = ""; //댓글목록 태그(수정, 삭제);
+                        var tag = ''; //댓글목록 태그(수정, 삭제);
                         $(result).each(function (i, rVO) {
-                            tag += "<li><div class='comment-section'>";
-                            tag += "<div><b>" + rVO.writer + "</b>(" + rVO.write_date + ")</div>";
-                            tag += "<div class='content-and-buttons'>";
-                            tag += "<p class='comment-content'>" + rVO.content + "</p>";
-
-                            if ('${logId}' == rVO.writer) {
-                                tag += "<div class='button-container'>";
-                                tag += "<input type='hidden' class='comment-id' value='" + rVO.comment_id + "'/>";
-                                tag += "<input type='button' class='reply-button replyEdit' id='replyEdit' value='Edit'/>";
-                                tag += "<input type='button' class='reply-button' id='replyDelete' value='Del'/>";
-                            }else{
-                                tag += "<div class='button-container'>";
-                                tag += "<input type='hidden' class='reply-button reply-comment-id' value='" + rVO.comment_id + "'/>";
-                                tag += "<input type='hidden' class='reply-button reply-writer' value='" + rVO.writer + "'/>";
-                                tag += "<input type='button' class='reply-button' id='replyReport' value='Report'/>";
-                                tag += "<input type='button' class='reply-button' id='replyLike' value='Like'/>";
+                            if (rVO.depth == 0) {
+                                tag += "<li><div class='comment-section'>";
+                            } else {
+                                tag += "<li><div class='comment-section-re'>";
                             }
-                            tag += "<div>&nbsp추천수: " + rVO.like + "</div>"
+                            if(rVO.is_deleted==1){
+                                tag += "<div><b>삭제된 메세지</b></div>";
+                                tag += "<div class='content-and-buttons'>";
+                                tag += "<p class='comment-content'>삭제된 메세지 내용입니다.</p>";
+                            }else{
+                                tag += "<div><b>" + rVO.writer + "</b>(" + rVO.write_date + ")</div>";
+                                tag += "<div class='content-and-buttons'>";
+                                tag += "<p class='comment-content'>" + rVO.content + "</p>";
+
+                                if ('${logId}' == rVO.writer) {
+                                    tag += "<div class='button-container'>";
+                                    tag += "<input type='hidden' class='reply-button comment-id reply-comment-id' value='" + rVO.comment_id + "'/>";
+                                    if (rVO.depth == 0) {
+                                        tag += "<input type='button' class='reply-button reply' id='reply' value='Reply'/>";
+                                    }
+                                    tag += "<input type='button' class='reply-button replyEdit' id='replyEdit' value='Edit'/>";
+                                    tag += "<input type='button' class='reply-button' id='replyDelete' value='Del'/>";
+                                } else {
+                                    tag += "<div class='button-container'>";
+                                    tag += "<input type='hidden' class='reply-button comment-id reply-comment-id' value='" + rVO.comment_id + "'/>";
+                                    if (rVO.depth == 0) {
+                                        tag += "<input type='button' class='reply-button reply' id='reply' value='Reply'/>";
+                                    }
+                                    tag += "<input type='hidden' class='reply-button reply-writer' value='" + rVO.writer + "'/>";
+                                    tag += "<input type='button' class='reply-button' id='replyReport' value='Report'/>";
+                                    if (rVO.myLike == 1) {
+                                        tag += "<input type='button' class='reply-button active' id='replyLike' value='Like'/>";
+                                    } else {
+                                        tag += "<input type='button' class='reply-button' id='replyLike' value='Like'/>";
+                                    }
+                                }
+                                tag += "<div>&nbsp LIKE: " + rVO.like + "</div>"
+                            }
+
                             tag += "</div>";
                             tag += "</div>";
                             tag += "</li>";
                         });
-
                         $("#replyList").html(tag);
 
                     },
@@ -264,7 +324,7 @@
                     data: {no: ${bVO.post_id}},
                     type: 'GET',
                     success: function (result) {
-                        $("#liked").html(result);
+                        $("#liked").html("LIKE " + result);
                     },
                     error: function (e) {
                         console.log(e.responseText);
@@ -273,39 +333,78 @@
                 })
             }
 
-            $(document).on('click', '.replyEdit', function() {
+            $(document).on('click', '.reply', function () {
+                var commentId = $(this).siblings('.comment-id').val();
+                console.log("Comment ID:", commentId);
+                currentCommentId = commentId;
+                var parentLi = $(this).closest('li');
+                $('#replyFormReply').insertAfter(parentLi).show();
+                $('#replyFormEdit').hide();
+            });
+
+            $(document).on('click', '.replyEdit', function () {
                 var currentContent = $(this).closest('.comment-section').find('.comment-content').text();
                 var commentId = $(this).siblings('.comment-id').val();
                 console.log("Comment ID:", commentId);
-                currentCommentId=commentId;
+                currentCommentId = commentId;
+                var parentLi = $(this).closest('li');
                 $('#content_Edit').val(currentContent);
-                $('#replyFormEdit').show();
-                $('#replyForm').hide();
+                $('#replyFormEdit').insertAfter(parentLi).show();
+                $('#replyFormReply').hide();
             });
 
-            $('#EditReply').click(function(e) {
+            $('#EditReply').click(function (e) {
                 e.preventDefault();
                 var postId = $('input[name="post_id_Edit"]').val();
                 var updatedContent = $('#content_Edit').val();
-                var commentId=currentCommentId;
+                var commentId = currentCommentId;
                 console.log(postId, updatedContent, commentId);
                 $.ajax({
                     url: '/boardReply/edit',
                     type: 'POST',
                     data: {
                         post_id: postId,
-                        comment_id:commentId,
+                        comment_id: commentId,
                         content: updatedContent
                     },
-                    success: function(response) {
+                    success: function (response) {
                         alert('Comment updated successfully.');
                         getReply();
                         $('#replyFormEdit').hide();
                         $('#replyForm').show();
                     },
-                    error: function(err) {
+                    error: function (err) {
                         alert('Error updating comment.');
                         console.log(err);
+                    }
+                });
+            });
+
+            $(document).on('click', '#ReplyReply', function (e) {
+                console.log(currentCommentId);
+                e.preventDefault();
+                var postId = $('input[name="post_id_Reply"]').val();
+                var updatedContent = $('#content_Reply').val();
+                var commentId = currentCommentId;
+                console.log(postId, updatedContent, commentId);
+                $.ajax({
+                    url: '/boardReply/reply',
+                    type: 'POST',
+                    data: {
+                        post_id: postId,
+                        comment_id: commentId,
+                        content: updatedContent
+                    },
+                    success: function (response) {
+                        e.preventDefault();
+                        alert('Comment updated successfully.');
+                        getReply();
+                        $('#replyFormReply').hide();
+                        $('#replyForm').show();
+                    },
+                    error: function (err) {
+                        alert('Error updating comment.');
+                        console.log(err.responseText);
                     }
                 });
             });
@@ -328,9 +427,9 @@
                     }
 
                 })
-            })
+            });
             $(document).on('click', '#replyList input[value=Del]', function () {
-                if (!confirm("정말 삭제하시겠습니까?")) {
+                if (!confirm("Are you sure you want to delete?")) {
                     return;
                 }
                 var replyNo = $(this).siblings('input[type="hidden"]').val();
@@ -351,7 +450,7 @@
 
             });
             $(document).on('click', '#replyList input[value=Report]', function () {
-                if (!confirm("정말 신고하시겠습니까?")) {
+                if (!confirm("Are you sure you want to report this?")) {
                     return;
                 }
                 var replyNo = $(this).siblings('.reply-comment-id').val();
@@ -361,7 +460,8 @@
                     url: "${pageContext.servletContext.contextPath}/boardReply/report",
                     data: {
                         id: commentUserId,
-                        no: replyNo},
+                        no: replyNo
+                    },
                     success: function (r) {
                         console.log(r);
                         if (r.result == true) {
@@ -378,7 +478,7 @@
 
                 })
 
-            })
+            });
             $(document).on('click', '#replyList input[value=Like]', function () {
                 var replyNo = $(this).siblings('.reply-comment-id').val();
                 console.log(replyNo);
@@ -386,14 +486,17 @@
                     type: "POST",
                     url: "${pageContext.servletContext.contextPath}/boardReply/like",
                     data: {
-                        no: replyNo},
+                        no: replyNo
+                    },
                     success: function (r) {
                         console.log(r);
                         if (r.result == true) {
-                            console.log("success")
+                            console.log("success");
+                            alert(r.msg);
                             getReply();
                         } else {
                             alert(r.msg);
+                            getReply();
                         }
                         getLike();
 
@@ -404,7 +507,7 @@
 
                 })
 
-            })
+            });
 
             $("#likeButton").click(function () {
                 $.ajax({
@@ -414,6 +517,7 @@
                     success: function (r) {
                         console.log(r);
                         if (r.result == true) {
+                            alert(r.msg);
                             console.log("success")
                         } else {
                             alert(r.msg);
@@ -428,7 +532,7 @@
                 })
             });
             $("#report").click(function () {
-                if (!confirm("신고하시겠습니까?")) {
+                if (!confirm("Are you sure you want to report this?")) {
                     return;
                 }
                 $.ajax({
@@ -437,7 +541,7 @@
                     data: {no: ${bVO.post_id}, user_id: '${bVO.user_id}'},
                     success: function (r) {
                         if (r.result == true) {
-                            alert("신고했습니다.")
+                            alert("Reported.")
                         } else {
                             alert(r.msg);
                         }
@@ -448,64 +552,77 @@
             getReply();
             getLike();
         })
-
     </script>
 <body>
 <main>
     <div id="viewArea">
         <ul>
-            <li>글번호 : ${bVO.post_id} &nbsp; 작성자 : ${bVO.user_id} &nbsp; 조회수 : ${bVO.views} &nbsp; 작성일
-                : ${bVO.write_date}</li>
+            <li>POST ID : ${bVO.post_id} &nbsp; 🖋️${bVO.user_id} &nbsp; 👁️${bVO.views} &nbsp; 🗓️${bVO.write_date}</li>
             <hr>
-            <li><h4><b>제목 : ${bVO.title}</b></h4></li>
+            <li><h4><b>${bVO.title}</b></h4></li>
             <hr>
             <li>${bVO.content}</li>
         </ul>
     </div>
-    <div>
-        <button id="likeButton">추천</button>
-        <div id="liked"></div>
-        <button id="report">신고하기</button>
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 40px; background-color: rgba(255, 227, 160, 0.2); padding: 0 20px; border-radius: 10px;">
+        <div style="display: flex; flex-direction: column; align-items: center; padding: 10px;">
+            <div id="liked" style="margin-bottom: 10px; font-size: 16px;">0 likes</div>
+            <button id="likeButton" class="likeButton">💛</button>
+        </div>
+        <div style="padding: 10px;">
+            <div style="margin-bottom: 10px; font-size: 16px; text-align: center">REPORT IT</div>
+            <button id="report"
+                    style="font-size: 24px; padding: 5px 10px; border: none; background-color: transparent; cursor: pointer; border-radius: 10px; background-color: rgba(255, 227, 160, 0.4);">
+                🔔
+            </button>
+        </div>
     </div>
     <br>
     <hr style="width: 1000px;">
     <div class="util">
-        <button id="toList" class="btn btn-secondary">목록</button>
+        <button id="toList" class="btn btn-secondary">LIST</button>
         <c:if test="${logId==bVO.user_id}">
-            <button id="editPost" class="btn btn-warning">수정</button>
+            <button id="editPost" class="btn btn-warning">EDIT</button>
         </c:if>
 
         <c:if test="${logId==bVO.user_id}">
-            <button id="deletePost" class="btn btn-warning">삭제</button>
+            <button id="deletePost" class="btn btn-warning">DELETE</button>
         </c:if>
     </div>
     <hr style="width: 1000px;">
     <!-- 댓글 -->
     <div class="replyArea">
-        <h5>댓글 목록</h5>
+        <h5>COMMENT LIST</h5>
         <br>
         <ul id="replyList">
         </ul>
         <br>
         <c:if test="${'Y'.equals(logStatus)}">
-            <h5>댓글 작성</h5>
+            <h5>COMMENT</h5>
             <br>
             <form method="post" id="replyForm">
                 <!--  원글 글번호 -->
                 <input type="hidden" name="post_id" value="${bVO.post_id}"/>
                 <textarea name="content" id="content"></textarea>
-                <!-- button은 form안에있을경우 input type submit과 동일 -->
                 <div>
-                    <button class="btn btn-warning" id="addReply">댓글등록</button>
+                    <button class="btn btn-warning" id="addReply">POST</button>
                 </div>
             </form>
         </c:if>
+
+        <form method="post" id="replyFormReply" style="display: none">
+            <input type="hidden" name="post_id_Reply" value="${bVO.post_id}"/>
+            <textarea name="content" id="content_Reply"></textarea>
+            <div>
+                <button class="btn btn-warning" id="ReplyReply">REPLY</button>
+            </div>
+        </form>
 
         <form method="post" id="replyFormEdit" style="display: none">
             <input type="hidden" name="post_id_Edit" value="${bVO.post_id}"/>
             <textarea name="content" id="content_Edit"></textarea>
             <div>
-                <button class="btn btn-warning" id="EditReply">댓글등록</button>
+                <button class="btn btn-warning" id="EditReply">EDIT</button>
             </div>
         </form>
     </div>

@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Insert title here</title>
+    <title>QUIZ : MEDIUM</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -33,7 +33,6 @@
         #quiz_content{
             width: 900px;
             height: 400px;
-            line-height: 400px;
             font-size: 7em;
             border:5px solid #000000;
             margin: 0 auto;
@@ -50,11 +49,11 @@
         }
         .form-control{
             width: 700px;
-            font-size: 60px;
+            font-size: 40px;
         }
         .input-group-text{
             width: 200px;
-            font-size: 60px;
+            font-size: 40px;
             margin: 0 auto;
             background-color: #FFD954;
         }
@@ -70,6 +69,15 @@
                     $('#submitButton').prop('disabled', false);
                 } else {
                     $('#submitButton').prop('disabled', true);
+                }
+            });
+            document.getElementById('sound_button').addEventListener('click', function() {
+                var audioPath = '${quiz.quiz_sound}';
+                if (audioPath === 'error') {
+                    alert('Sound cannot be played.');
+                } else {
+                    var audio = new Audio(audioPath);
+                    audio.play();
                 }
             });
 
@@ -160,16 +168,25 @@
 
 <body>
 <main>
-    <div class="language_box">중간 : <span id="language"></span></div>
-    <div class="language_box">정답 언어 : <span id="answer_lang"></span></div>
-    <div id="quiz_content">${quiz.quiz_content}</div>
+    <div class="language_box">MEDIUM : <span id="language"></span></div>
+    <div class="language_box">ANSWER LANGUAGE : <span id="answer_lang"></span></div>
+    <div id="quiz_content" style="display: flex; flex-direction: column">
+        <div>
+            <button id="sound_button" style="background-color: transparent; border: none; font-size: 0.5em; cursor: pointer; float: left; display: ${quiz.quiz_sound == 'error' ? 'none' : 'inline-block'};">
+                🔊
+            </button>
+        </div>
+        <div style="margin-top: 20px;">
+            ${quiz.quiz_content}
+        </div>
+    </div>
     <form method="post" id="input_form" class="input-group mb-3" action="/quiz/checkAnswer">
-        <input type="text" name="user_answer" class="form-control" placeholder="정답 입력"/>
+        <input type="text" name="user_answer" class="form-control" placeholder="ENTER ANSWER"/>
         <input type="hidden" name="quiz_id" value="${quiz.quiz_id}"/>
         <input type="hidden" name="quiz_content" value="${quiz.quiz_content}"/>
         <input type="hidden" name="level" value="${quiz.level}"/>
         <input type="hidden" name="quiz_lang" value="${quiz.quiz_lang}"/>
-        <input type="submit" class="input-group-text" value="제출"/>
+        <input type="submit" class="input-group-text" value="SUBMIT"/>
     </form>
 </main>
 </body>

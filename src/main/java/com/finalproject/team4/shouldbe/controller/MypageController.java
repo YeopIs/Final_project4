@@ -100,11 +100,17 @@ public class MypageController {
 
         List<FriendVO> flist = service.friendList(pvo, followed_user_id);
         System.out.println(flist);
-        for(int i=0;i< flist.size();i++){
-            FriendVO fvo= service.selectChatId(followed_user_id,flist.get(i).getFollowing_user_id());
-            flist.get(i).setChat_id(fvo.getChat_id());
-            flist.get(i).setFrom_id(fvo.getFrom_id());
-            flist.get(i).setTo_id(fvo.getTo_id());
+        for(int i=0;i< flist.size();i++) {
+            FriendVO fvo = service.selectChatId(followed_user_id, flist.get(i).getFollowing_user_id());
+            if (fvo != null) {
+                flist.get(i).setChat_id(fvo.getChat_id());
+                flist.get(i).setFrom_id(fvo.getFrom_id());
+                flist.get(i).setTo_id(fvo.getTo_id());
+            } else {
+                flist.get(i).setChat_id(0);
+                flist.get(i).setFrom_id("null");
+                flist.get(i).setTo_id("null");
+            }
         }
         System.out.println(flist);
         mav.addObject("myId", followed_user_id);

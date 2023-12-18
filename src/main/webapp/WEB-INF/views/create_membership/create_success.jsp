@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>비밀번호 찾기</title>
+    <title>CREATE SUCCESS</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -50,11 +50,11 @@
 </head>
 <body>
 <main>
-    <h1>회원가입 성공</h1>
+    <h1>REGISTER SUCCESS</h1>
     <ul>
         <li style="margin-bottom: 10px">
-            <input type="button" value="메인으로" class="submitbtn" onclick="location.href='../../..'"/></li>
-        <li style="margin-bottom: 10px"><input type="button" value="로그인하기" onclick="location.href='/login'"
+            <input type="button" value="MAIN" class="submitbtn" onclick="location.href='../../..'"/></li>
+        <li style="margin-bottom: 10px"><input type="button" value="LOGIN" onclick="location.href='/login'"
                                                class="submitbtn"/></li>
 
     </ul>

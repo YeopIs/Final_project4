@@ -10,12 +10,13 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="${pageContext.servletContext.contextPath}/js/no-cache.js"></script>
+    <script src="${pageContext.servletContext.contextPath}/js/refreshCounter.js"></script>
     <link rel="shortcut icon" href="https://ibsintelligence.com/wp-content/uploads/2023/05/Smoothpay.jpg">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Titillium+Web&family=ZCOOL+XiaoWei&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Kanit&family=M+PLUS+1&family=Nanum+Gothic&family=Noto+Sans+HK&family=Noto+Sans+SC&family=Noto+Sans+TC&family=Titillium+Web&display=swap');
 
         body {
-            font-family: 'Titillium Web', 'ZCOOL XiaoWei', 'Nanum Gothic', serif !important;
+            font-family: 'Titillium Web', 'M PLUS 1','Noto Sans HK','Noto Sans SC','Noto Sans TY','Nanum Gothic', serif !important;
         }
 
         .banner {
@@ -85,7 +86,7 @@
         }
 
         .dropdown-content a:hover {
-            background-color: #ffe3a0;
+            background-color: rgba(255, 227, 160, 0.3);
         }
 
         .dropdown:hover .dropdown-content {
@@ -129,12 +130,12 @@
 <div class="banner">
     <div class="logo-area">
         <a href="${pageContext.servletContext.contextPath}/"><img
-                src="${pageContext.servletContext.contextPath}/image/logo.png" class="logo" height="110px"></a>
+                src="${pageContext.servletContext.contextPath}/image/logo.png" class="logo" height="150px"></a>
         <!-- 로고 이미지 -->
     </div>
     <div class="login">
         <c:if test="${logStatus=='Y'}">
-            <a href="${pageContext.servletContext.contextPath}/mypage/change_user"> <!-- 마이페이지 -->
+            <a href="${pageContext.servletContext.contextPath}/mypage/"> <!-- 마이페이지 -->
                 <img src="${pageContext.servletContext.contextPath}/image/profile/user1.jpg" class="user-icon"
                      id="user-icon" style="border-radius: 50%; width: 50px; height: auto;"/></a>
             <!--유저로고-->
@@ -142,7 +143,7 @@
         </c:if>
         <c:if test="${logStatus!='Y'}">
             <a href="${pageContext.servletContext.contextPath}/login" class="login-button">LOGIN&nbsp</a> | <a
-                href="${pageContext.servletContext.contextPath}/create" class="login-button">&nbspREGISTER</a>
+                href="${pageContext.servletContext.contextPath}/captcha" class="login-button">&nbspREGISTER</a>
         </c:if>
     </div>
 </div>
@@ -151,9 +152,10 @@
     <div class="category">
         <!-- 마이페이지 Dropdown -->
         <div class="dropdown">
-            <a href="${pageContext.servletContext.contextPath}/mypage/change_user" class="dropbtn">MY PAGE</a>
+            <a href="${pageContext.servletContext.contextPath}/mypage/" class="dropbtn">MY PAGE</a>
             <c:if test="${logStatus=='Y'}">
                 <div class="dropdown-content">
+                    <a href="${pageContext.servletContext.contextPath}/mypage/">USER INFO</a>
                     <a href="${pageContext.servletContext.contextPath}/mypage/change_user">INFO EDIT</a>
                     <a href="${pageContext.servletContext.contextPath}/mypage/post_user">POST LIST</a>
                     <a href="${pageContext.servletContext.contextPath}/mypage/friend_user">FRIENDS</a>

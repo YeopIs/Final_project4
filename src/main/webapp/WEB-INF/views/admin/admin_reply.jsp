@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>관리자 페이지 _ 댓글관리</title>
+    <title>관리자 페이지 : 댓글관리</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -47,13 +47,14 @@
         }
 
         .container {
-            margin-top:50px;
+            margin-top:30px;
             width: 1200px;
             height: auto;
             display: flex;
             flex-direction: row;
-            background-color: rgba(255, 255, 255, 0);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0);
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(30px);
         }
 
         #side_menu {

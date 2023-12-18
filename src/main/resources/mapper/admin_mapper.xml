@@ -80,7 +80,9 @@
     <select id="countSuspendedMember" resultType="int">
         SELECT COUNT(*)
         FROM suspended_users
+        WHERE DATE_ADD(suspended_time, INTERVAL suspended_period DAY) > CURDATE()
     </select>
+
     <select id="adminSuspendedList" resultType="AdminMemberVO">
         SELECT su.suspended_id, su.user_id, su.suspended_time, su.suspended_period, su.reason,
                u.user_name, u.count_report
@@ -110,7 +112,7 @@
     <select id="adminWithdrawnList" resultType="AdminMemberVO">
         select user_id, withdrawn_time
         from withdrawn_users
-        ORDER BY user_id
+        ORDER BY withdrawn_time asc
             LIMIT #{pvo.offsetPoint}, #{pvo.onePageRecord}
     </select>
     <select id="adminWithdrawnListUsers" resultType="AdminMemberVO">
@@ -119,12 +121,14 @@
         where user_id=#{user_id}
     </select>
 
-    <update id="withdrawExpiredUsers">
+    <delete id="withdrawExpiredUsers">
     <![CDATA[
-        DELETE FROM users
-        WHERE withdraw < NOW() - INTERVAL 30 DAY
+        DELETE users
+        FROM users
+        INNER JOIN withdrawn_users ON users.user_id = withdrawn_users.user_id
+        WHERE withdrawn_users.withdrawn_time < NOW() - INTERVAL 30 DAY
         ]]>
-    </update>
+    </delete>
 
     <delete id="deleteUserById" parameterType="String">
         DELETE FROM users WHERE user_id = #{userId}
@@ -137,7 +141,7 @@
     </select>
     <select id="getBoardReportList" resultType="com.finalproject.team4.shouldbe.vo.BoardReportVO">
         SELECT post_report_id,user_id,post_id,report_time FROM post_report
-        ORDER BY post_id  <!-- Replace 'some_column' with the actual column you want to sort by -->
+        ORDER BY report_time desc
         LIMIT #{pvo.offsetPoint}, #{pvo.onePageRecord}
     </select>
     <select id="getPostsVO" resultType="com.finalproject.team4.shouldbe.vo.BoardReportVO">
@@ -157,7 +161,7 @@
         SELECT cr.*, c.post_id
         FROM comment_report cr
                  INNER JOIN comments c ON cr.comment_id = c.comment_id
-        ORDER BY cr.report_time
+        ORDER BY cr.report_time desc
             LIMIT #{pvo.offsetPoint}, #{pvo.onePageRecord}
     </select>
     <select id="commentContent" resultType="com.finalproject.team4.shouldbe.vo.AdminCommentReportVO">
@@ -226,7 +230,7 @@
     <select id="adminChatList" resultType="com.finalproject.team4.shouldbe.vo.AdminChatVO">
         select message_report_id, user_id, msg_id, report_time, content
         from message_report
-        ORDER BY report_time
+        ORDER BY report_time desc
             LIMIT #{pvo.offsetPoint}, #{pvo.onePageRecord}
     </select>
     <delete id="messageReportDelete">

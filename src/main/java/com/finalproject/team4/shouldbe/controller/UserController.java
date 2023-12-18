@@ -1,6 +1,7 @@
 package com.finalproject.team4.shouldbe.controller;
 
 import com.finalproject.team4.shouldbe.service.*;
+import com.finalproject.team4.shouldbe.util.CaptchaUtil;
 import com.finalproject.team4.shouldbe.util.EncryptUtil;
 import com.finalproject.team4.shouldbe.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,12 +40,61 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/captcha")
+    public String captcha(HttpSession session){
+        String[] captchaPaths = CaptchaUtil.APICaptchaCombined();
+        session.setAttribute("captchaImagePath", captchaPaths[0]);
+        session.setAttribute("captchaAudioPath", captchaPaths[1]);
+        session.setAttribute("captchaKey",captchaPaths[2]);
+        session.setAttribute("captchaKeyS",captchaPaths[3]);
+        return "create_membership/captcha";
+    }
+
+    // /refresh/captcha 핸들러
+    @GetMapping("/refresh/captcha")
+    public String re_captcha(HttpServletRequest request, HttpSession session) {
+        // 현재 URL을 세션에 저장
+        if(! request.getHeader("Referer").equals("http://localhost:9988/refresh/captcha")){
+            String refererUrl = request.getHeader("Referer");
+            session.setAttribute("previousUrl", refererUrl);
+        }
+        String refererUrl= (String) session.getAttribute("previousUrl");
+        System.out.println(refererUrl);
+
+        // 기존의 캡챠 관련 로직
+        String[] captchaPaths = CaptchaUtil.APICaptchaCombined();
+        session.setAttribute("captchaImagePath", captchaPaths[0]);
+        session.setAttribute("captchaAudioPath", captchaPaths[1]);
+        session.setAttribute("captchaKey",captchaPaths[2]);
+        session.setAttribute("captchaKeyS",captchaPaths[3]);
+
+        return "captcha";
+    }
+
+    // /refresh/verifyCaptcha 핸들러
+    @PostMapping("/refresh/verifyCaptcha")
+    public String verifyCaptchaRefresh(String captchaInput, HttpSession session) {
+        String IKey = (String) session.getAttribute("captchaKey");
+        String Skey = (String) session.getAttribute("captchaKeyS");
+        boolean a = CaptchaUtil.APICaptchakeyResult(IKey, captchaInput);
+        boolean b = CaptchaUtil.APICaptchakeyResultSound(Skey, captchaInput);
+
+        if (a || b) {
+            // 세션에서 이전 URL 가져오기
+            String previousUrl = (String) session.getAttribute("previousUrl");
+            return "redirect:" + (previousUrl != null ? previousUrl : "/");
+        }
+
+        return "redirect:/captcha";
+    }
+
+
     @GetMapping("/create")
-    public String create_membership(HttpSession session) {
-        if (session.getAttribute("logStatus") == "Y") {
+    public String createMembership(HttpSession session, HttpServletRequest request) {
+        if ("Y".equals(session.getAttribute("logStatus"))) {
             return "redirect:/";
         }
-        session.invalidate();//회원가입중 새로고침시 인증정보 날리기
+        session.invalidate(); // 회원가입중 새로고침시 인증정보 날리기
         return "create_membership/create_membership";
     }
 
@@ -97,6 +148,18 @@ public class UserController {
         return true;
     }
 
+    @PostMapping("/verifyCaptcha")
+    public String verifyCaptcha(String captchaInput, HttpSession session) {
+        String IKey = (String) session.getAttribute("captchaKey");
+        String Skey= (String) session.getAttribute("captchaKeyS");
+        boolean a=CaptchaUtil.APICaptchakeyResult(IKey, captchaInput);
+        boolean b=CaptchaUtil.APICaptchakeyResultSound(Skey, captchaInput);
+        if(a||b){
+            return "redirect:/create";
+        }
+        return "redirect:/captcha";
+    }
+
     @PostMapping("/createOk")
     public String createOk(UserVO vo, HttpSession session, RedirectAttributes redirect) {
         if (session.getAttribute("emailValid") != "Y" || session.getAttribute("idValid") != "Y") {
@@ -139,13 +202,23 @@ public class UserController {
                           @RequestParam("userid") String userid,
                           @RequestParam("userpwd") String userpwd,
                           RedirectAttributes redirect) {
+        Integer loginFailCount = (Integer) session.getAttribute("loginFailCount");
+        if (loginFailCount == null) {
+            loginFailCount = 0;
+        }
         LoginVO vo = userService.userLoginCheck(userid);
         System.out.println(vo);
         if (vo == null) {//로그인 실패
             System.out.println(1);
+            loginFailCount++;
+            if (loginFailCount >= 3) {
+                session.setAttribute("loginFailCount", 0);
+                return "redirect:/refresh/captcha";
+            }
+            session.setAttribute("loginFailCount", loginFailCount);
             redirect.addFlashAttribute("result", "로그인 실패, 아이디를 확인해주세요!");
             return "redirect:/login";
-        } else if (vo.getWithdraw()!= null) {
+        } else if (vo.getWithdraw()!= 0) {
             System.out.println(2);
             redirect.addFlashAttribute("result", "탈퇴 예정 회원입니다. 탈퇴를 취소하고 싶다면 문의해주세요.");
             return "redirect:/login";
@@ -193,6 +266,12 @@ public class UserController {
         }
         System.out.println(encrypt.encrypt(userpwd, vo.getSalt()));
         System.out.println(vo.getPassword());
+        loginFailCount++;
+        if (loginFailCount >= 3) {
+            session.setAttribute("loginFailCount", 0);
+            return "redirect:/refresh/captcha";
+        }
+        session.setAttribute("loginFailCount", loginFailCount);
         redirect.addFlashAttribute("result", "로그인 실패, 비밀번호를 확인해주세요!");
         return "redirect:/login";
 

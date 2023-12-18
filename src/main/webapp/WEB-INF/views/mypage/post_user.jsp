@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>작성한글</title>
+    <title>POST : POST</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -44,7 +44,7 @@
         }
 
         .sidebar-menu li a:hover {
-            background-color: #ddd;
+            background-color: rgba(255, 227, 160, 0.3);
         }
 
         .active {
@@ -96,26 +96,26 @@
     <div id="sidebar">
         <br/>
         <ul class="sidebar-menu">
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/change_user">회원정보 수정</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/post_user" class="active">작성한글</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/friend_user">친구관리</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/save_chat">저장소</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/withdraw_user">탈퇴하기</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/">USER INFO</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/change_user">INFO EDIT</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/post_user" class="active">POST LIST</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/friend_user">FRIENDS</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/save_chat">STORE</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/withdraw_user">WITHDRAW</a></li>
         </ul>
     </div>
     <div id="content">
         <ul class="list-inline">
-            <li class="list-inline-item"><a href="${pageContext.servletContext.contextPath}/mypage/post_user" id="now">작성 글</a>
+            <li class="list-inline-item"><a href="${pageContext.servletContext.contextPath}/mypage/post_user" id="now">POST</a>
             </li>
-            <li class="list-inline-item"><a href="${pageContext.servletContext.contextPath}/mypage/post_user/reply">작성
-                댓글</a></li>
+            <li class="list-inline-item"><a href="${pageContext.servletContext.contextPath}/mypage/post_user/reply">COMMENT</a></li>
         </ul>
         <table class="table">
             <thead>
             <tr>
-                <th>글번호</th>
-                <th>글 제목</th>
-                <th>작성일</th>
+                <th>NO</th>
+                <th>TITLE</th>
+                <th>DATE</th>
             </tr>
             </thead>
             <tbody>

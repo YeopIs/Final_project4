@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>관리자 페이지 _ 대시보드</title>
+    <title>관리자 페이지 : 대시보드</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -48,13 +48,14 @@
         }
 
         .container {
-            margin-top:50px;
+            margin-top:30px;
             width: 1200px;
             height: auto;
             display: flex;
             flex-direction: row;
-            background-color: rgba(255, 255, 255, 0);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0);
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(30px);
         }
 
         #side_menu {
@@ -80,7 +81,6 @@
             color: white;
         }
         section {
-            width: 450px;
             height: auto;
             margin: 20px;
             position: relative;
@@ -252,12 +252,19 @@
         <h1 id="dashboardTitle">대시보드</h1>
         <div id="dashboard">
             <section id="preferred">
-                <h2>선호언어</h2>
+                <h2>가입자 국적 통계
+                </h2>
                 <div id="">
-                    <canvas id="bar-chart-horizontal" width="450" height="200"></canvas>
+                    <canvas id="bar-chart-horizontal" width="900" height="400"></canvas>
                 </div>
             </section>
-            <section id="recent-board">
+            <section id="visitor">
+                <h2>월별 방문자수</h2>
+                <div id="chart">
+                    <canvas id="line-chart" width="900" height="400"></canvas>
+                </div>
+            </section>
+            <section id="recent-board" style="width: 450px">
                 <h2>최신게시글</h2>
                 <ul id="boardList">
                     <li>게시판</li>
@@ -272,13 +279,7 @@
                     </c:forEach>
                 </ul>
             </section>
-            <section id="visitor">
-                <h2>월별 방문자수</h2>
-                <div id="chart">
-                    <canvas id="line-chart" width="450" height="200"></canvas>
-                </div>
-            </section>
-            <section id="recent-reply">
+            <section id="recent-reply"style="width: 450px">
                 <h2>최신댓글</h2>
                 <ul id="replyList">
                     <li>글제목</li>

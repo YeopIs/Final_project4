@@ -8,15 +8,31 @@
                content,
                date_format(write_date, '%m-%d %H:%i') as write_date,
                is_deleted,
-               count(l.user_id)                       as 'like'
-        from comments c
-                 left join comment_like l on c.comment_id = l.comment_id
-        where post_id = #{param1}
-        group by comment_id
-        order by write_date;
+               depth,
+               target_parent,
+               count(l.user_id)                       as 'like',
+               CASE WHEN EXISTS (
+                SELECT 1
+                FROM comment_like cl
+                WHERE cl.comment_id = c.comment_id
+                AND cl.user_id = #{param2}
+                ) THEN 1 ELSE 0 END AS myLike
+    FROM comments c
+    LEFT JOIN comment_like l ON c.comment_id = l.comment_id
+    WHERE post_id = #{param1}
+        GROUP BY c.comment_id
+        ORDER BY target_parent asc, write_date asc;
     </select>
-    <insert id="addReply">
-        insert into comments(user_id, post_id, content) values(#{writer}, #{post_id}, #{content})
+    <insert id="addReply" useGeneratedKeys="true" keyProperty="comment_id">
+        insert into comments(user_id, post_id, content, target_parent) values(#{writer}, #{post_id}, #{content},0)
+    </insert>
+    <update id="updateTargetParent">
+        UPDATE comments
+        SET target_parent = #{comment_id}
+        WHERE comment_id = #{comment_id}
+    </update>
+    <insert id="addReplyReply">
+        insert into comments(user_id, post_id, content,target_parent,depth) values(#{userId}, #{postId}, #{content},#{commentId},1)
     </insert>
     <select id="selectReply" resultType="BoardReplyVO">
         select comment_id,
@@ -28,9 +44,11 @@
         from comments
         where post_id = #{param1} and comment_id = #{param2}
     </select>
-    <delete id="deleteReply">
-        delete from comments where post_id=#{param1} and comment_id = #{param2}
-    </delete>
+    <update id="deleteReply">
+        update comments
+        set is_deleted=1
+        where post_id=#{param1} and comment_id = #{param2}
+    </update>
     <insert id="report">
         INSERT INTO comment_report(comment_id, user_id)
         SELECT #{param1}, #{param2}
@@ -39,7 +57,17 @@
         WHERE comment_id = #{param1} AND user_id = #{param2}
                 );
     </insert>
-    <insert id="like">
+    <select id="like" resultType="int">
+        SELECT COUNT(*)
+        FROM comment_like
+        WHERE comment_id = #{param1} AND user_id = #{param2}
+    </select>
+
+    <delete id="decreaseLike">
+        delete from comment_like where comment_id=#{param1} and user_id=#{param2}
+    </delete>
+
+    <insert id="increaseLike">
         insert into comment_like(comment_id, user_id)
         SELECT #{param1}, #{param2}
             WHERE NOT EXISTS (

@@ -46,13 +46,14 @@
         }
 
         .container {
-            margin-top:50px;
+            margin-top:30px;
             width: 1200px;
             height: auto;
             display: flex;
             flex-direction: row;
-            background-color: rgba(255, 255, 255, 0);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0);
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(30px);;
         }
 
         #side_menu {
@@ -238,7 +239,7 @@
             <table id="example" class="display" style="width:100%">
                 <thead id="list_head">
                 <tr class="management_list">
-                    <th class="user_name">닉네임</th>
+                    <th class="user_name">이름</th>
                     <th class="user_id">아이디</th>
                     <th class="time">정지일</th>
                     <th> 정지기간</th>

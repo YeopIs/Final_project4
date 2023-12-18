@@ -106,27 +106,46 @@
                     <img src="${pageContext.servletContext.contextPath}/image/profile/${user.profile_img}" alt="${user.username}" class="user-image" />
                     <div class="user-info">
                         <h3>${user.userid}</h3>
-                        <p>Email: ${user.email}</p>
-                        <p>국적 :
+                        <p>EMAIL: ${user.email}</p>
+                        <p>NATION :
                             <c:choose>
-                                <c:when test="${user.nation == 'kor'}">한국</c:when>
-                                <c:when test="${user.nation == 'usa'}">미국</c:when>
-                                <c:when test="${user.nation == 'jp'}">일본</c:when>
+                                <c:when test="${user.nation == 'ko'}">KOREA</c:when>
+                                <c:when test="${user.nation == 'en'}">USA</c:when>
+                                <c:when test="${user.nation == 'ja'}">JAPAN</c:when>
+                                <c:when test="${user.nation == 'zn-CN'}">CHINA</c:when>
+                                <c:when test="${user.nation == 'vi'}">VIETNAM</c:when>
+                                <c:when test="${user.nation == 'th'}">THAILAND</c:when>
+                                <c:when test="${user.nation == 'id'}">INDONESIA</c:when>
+                                <c:when test="${user.nation == 'fr'}">FRANCE</c:when>
+                                <c:when test="${user.nation == 'es'}">SPAIN</c:when>
+                                <c:when test="${user.nation == 'ru'}">RUSSIA</c:when>
+                                <c:when test="${user.nation == 'de'}">GERMANY</c:when>
+                                <c:when test="${user.nation == 'it'}">ITALY</c:when>
                                 <c:otherwise>${user.nation}</c:otherwise>
                             </c:choose>
                         </p>
-                        <p>사용 언어 :
+                        <p>USE LANGUAGE :
                             <c:forEach var="langCode" items="${fn:split(user.lang, '/')}" varStatus="status">
                                 <c:choose>
                                     <c:when test="${langCode == 'ko'}">한국어</c:when>
-                                    <c:when test="${langCode == 'en'}">영어</c:when>
-                                    <c:when test="${langCode == 'jp'}">일본어</c:when>
+                                    <c:when test="${langCode == 'en'}">English</c:when>
+                                    <c:when test="${langCode == 'ja'}">日本語</c:when>
+                                    <c:when test="${langCode == 'zn-CN'}">中國語-简体</c:when>
+                                    <c:when test="${langCode == 'zn-TW'}">中國語-繁体</c:when>
+                                    <c:when test="${langCode == 'vi'}">Tiếng Việt</c:when>
+                                    <c:when test="${langCode == 'th'}">แบบไทย</c:when>
+                                    <c:when test="${langCode == 'id'}">Indonésia</c:when>
+                                    <c:when test="${langCode == 'fr'}">Français</c:when>
+                                    <c:when test="${langCode == 'es'}">Español</c:when>
+                                    <c:when test="${langCode == 'ru'}">Русский</c:when>
+                                    <c:when test="${langCode == 'de'}">Deutsch</c:when>
+                                    <c:when test="${langCode == 'it'}">Italiano</c:when>
                                     <c:otherwise>${langCode}</c:otherwise>
                                 </c:choose>
                                 <c:if test="${!status.last}">, </c:if>
                             </c:forEach>
                         </p>
-                        <p>한마디 : ${user.profile_content}</p>
+                        <p>ABOUT ME : ${user.profile_content}</p>
                     </div>
                 </div>
                 <a href="${pageContext.request.contextPath}/chat/start?userId=${user.userid}" class="start-chat-btn">Start Chat</a>

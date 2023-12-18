@@ -15,10 +15,12 @@ public class BoardReplyVO {
     private int like;
     private String write_date;
     private String email;
-    private int isdelete;
+    private int is_deleted;
     private String board_cat;
     private String title;
     private int depth;
+    private int target_parent;
+    private int myLike;
 
     /*
     private int comment_report_id;

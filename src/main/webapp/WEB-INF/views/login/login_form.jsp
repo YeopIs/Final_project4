@@ -151,11 +151,11 @@
             <hr>
             <div id="link">
                 <ul>
-                    <li><a href="create">REGISTER</a></li>
+                    <li><a href="${pageContext.servletContext.contextPath}/captcha">REGISTER</a></li>
                     <li>|</li>
-                    <li><a href="login/findid">FIND ID</a></li>
+                    <li><a href="${pageContext.servletContext.contextPath}/login/findid">FIND ID</a></li>
                     <li>|</li>
-                    <li><a href="login/findpwd">FIND PW</a></li>
+                    <li><a href="${pageContext.servletContext.contextPath}/login/findpwd">FIND PW</a></li>
                 </ul>
             </div>
         </div>

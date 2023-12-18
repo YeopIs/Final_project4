@@ -4,9 +4,15 @@
     <select id="countUserChatRooms" resultType="int">
         SELECT COUNT(*)
         FROM chat_list
-        WHERE from_id = #{userId}
-           OR to_id = #{userId}
+        WHERE (from_id = #{userId} OR to_id = #{userId})
+          AND NOT EXISTS (
+            SELECT 1
+            FROM chat_visible
+            WHERE chat_visible.chat_id = chat_list.chat_id
+              AND chat_visible.state = #{userId}
+        )
     </select>
+
 
     <select id="getCurrentUserChatRooms" resultType="ChatRoomVO">
         SELECT *

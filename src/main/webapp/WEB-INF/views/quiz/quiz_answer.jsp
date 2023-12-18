@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Insert title here</title>
+    <title>QUIZ ANSWER</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -70,13 +70,13 @@
             var levelDescription = "";
             switch (level) {
                 case 1:
-                    levelDescription = "쉬움";
+                    levelDescription = "EASY";
                     break;
                 case 2:
-                    levelDescription = "중간";
+                    levelDescription = "MEDIUM";
                     break;
                 case 3:
-                    levelDescription = "어려움";
+                    levelDescription = "HARD";
                     break;
                 default:
                     levelDescription = "알 수 없음";
@@ -93,10 +93,10 @@
                     quizId: quizId,
                 },
                 success: function () {
-                    alert('정보가 성공적으로 저장되었습니다.');
+                    alert('Your information has been saved successfully.');
                 },
                 error: function () {
-                    alert("이미 저장된 내용입니다!");
+                    alert("It's already been saved!");
                 }
             });
         }
@@ -124,40 +124,40 @@
                     languageName = "한국어";
                     break;
                 case "en":
-                    languageName = "영어";
+                    languageName = "English";
                     break;
                 case "jp":
-                    languageName = "일본어";
+                    languageName = "日本語";
                     break;
                 case "zh-CN":
-                    languageName = "중국어 간체";
+                    languageName = "中國語-简体";
                     break;
                 case "zh-TW":
-                    languageName = "중국어 번체";
+                    languageName = "中國語-繁体";
                     break;
                 case "vi":
-                    languageName = "베트남어";
+                    languageName = "Tiếng Việt";
                     break;
                 case "th":
-                    languageName = "태국어";
+                    languageName = "แบบไทย";
                     break;
                 case "id":
-                    languageName = "인도네시아어";
+                    languageName = "Indonésia";
                     break;
                 case "fr":
-                    languageName = "프랑스어";
+                    languageName = "Français";
                     break;
                 case "es":
-                    languageName = "스페인어";
+                    languageName = "Español";
                     break;
                 case "ru":
-                    languageName = "러시아어";
+                    languageName = "Русский";
                     break;
                 case "de":
-                    languageName = "독일어";
+                    languageName = "Deutsch";
                     break;
                 case "it":
-                    languageName = "이탈리아어";
+                    languageName = "Italiano";
                     break;
                 default:
                     languageName = "알 수 없는 언어";
@@ -175,30 +175,30 @@
     <h1 id="level" class="quiz-level">${quizVO.level}</h1>
     <hr/>
     <div class="quiz-lang">
-        <label>퀴즈 언어</label>
+        <label>QUIZ LANGUAGE</label>
         <p id="quizLang"><span id="language"></span></p>
     </div>
     <div class="quiz-content">
-        <label>퀴즈 내용</label>
+        <label>QUIZ CONTENT</label>
         <p id="quizContent">${quizVO.quiz_content}</p>
     </div>
     <div class="user-answer">
-        <label>사용자 답변</label>
+        <label>USER ANSWER</label>
         <p id="userAnswer">${user_answer}</p>
     </div>
     <div class="correct-answer">
-        <label>정답</label>
+        <label>ANSWER</label>
         <p id="correctAnswer">${quizVO.answer}</p>
     </div>
     <div class="result">
-        <label>결과</label>
-        <p id="result">${result == 'correct' ? '정답입니다!' : '틀렸습니다.'}</p>
+        <label>RESULT</label>
+        <p id="result">${result == 'correct' ? 'SUCESS!' : 'WRONG.'}</p>
     </div>
 </main>
 <div class="buttons">
-    <button type="button" onclick="saveQuiz()">저장소에 저장</button>
+    <button type="button" onclick="saveQuiz()">STORE</button>
     <hr/>
-    <button type="button" onclick="nextQuiz()">다음 문제</button>
+    <button type="button" onclick="nextQuiz()">NEXT</button>
 </div>
 </body>
 

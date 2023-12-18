@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>탈퇴하기</title>
+    <title>WITHDRAW</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -47,7 +47,7 @@
         }
 
         .sidebar-menu li a:hover {
-            background-color: #ddd;
+            background-color: rgba(255, 227, 160, 0.3);
         }
 
         .active {
@@ -142,13 +142,13 @@
             var password_confirm = $('#password-confirm').val();
             var userConfirmed;
             if (password != password_confirm) {
-                alert("비밀번호가 일치하지 않습니다. 다시입력하세요.");
+                alert("Passwords do not match. Please enter again.");
                 return false;
             } else if (password == "") {
-                alert("비밀번호를 입력해주세요.");
+                alert("Please enter a password.");
                 return false;
             } else {
-                userConfirmed = confirm("정말 탈퇴하시겠습니까?");
+                userConfirmed = confirm("Are you sure you want to withdraw?");
             }
 
             if (!userConfirmed) {
@@ -163,11 +163,12 @@
     <div id="sidebar">
         <br>
         <ul class="sidebar-menu">
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/change_user">회원정보 수정</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/post_user">작성한글</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/friend_user">친구관리</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/save_chat">저장소</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/withdraw_user" class="active">탈퇴하기</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/">USER INFO</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/change_user">INFO EDIT</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/post_user">POST LIST</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/friend_user">FRIENDS</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/save_chat">STORE</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/withdraw_user" class="active">WITHDRAW</a></li>
         </ul>
     </div>
     <div id="content">
@@ -177,13 +178,13 @@
                 <div class="box">
                     <div class="input-container">
                         <input type="password" name="password" id="password" required=""/>
-                        <label for="password" class="form-label">비밀번호</label>
+                        <label for="password" class="form-label">PASSWORD</label>
                     </div>
                     <div class="input-container">
                         <input type="password" name="password-confirm" id="password-confirm" required=""/>
-                        <label for="password" class="form-label">비밀번호 확인</label>
+                        <label for="password" class="form-label">PASSWORD CONFIRM</label>
                     </div>
-                    <button type="submit" class="btn btn-warning submitBtn" onclick="confirmDeletion()">탈퇴하기</button>
+                    <button type="submit" class="btn btn-warning submitBtn" onclick="confirmDeletion()">WITHDRAW</button>
                 </div>
             </form>
         </div>

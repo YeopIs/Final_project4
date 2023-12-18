@@ -26,7 +26,7 @@
         select post_id, user_id, title, board_cat,date_format(write_date, '%y-%m-%d') write_date
         from posts
         where user_id = #{user_id}
-        ORDER BY post_id
+        ORDER BY post_id desc
             LIMIT #{pvo.offsetPoint}, #{pvo.onePageRecord}
     </select>
 
@@ -51,6 +51,8 @@
             posts p on c.post_id = p.post_id
         where
             c.user_id = #{user_id} and c.is_deleted = 0
+        ORDER BY c.post_id asc
+            LIMIT #{pvo.offsetPoint}, #{pvo.onePageRecord}
     </select>
 
     <select id="countReply" parameterType="String" resultType="int">
@@ -138,7 +140,7 @@
 
     <update id="withdraw_user">
         update users
-        set withdraw=current_timestamp()
+        set withdraw=1
         where user_id = #{user_id}
     </update>
 

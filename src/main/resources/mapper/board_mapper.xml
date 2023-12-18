@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.finalproject.team4.shouldbe.mapper.BoardMapper">
-    <select id="totalRecord" resultType="int">
-        select count(post_id) from posts where board_cat=#{board_cat}
+    <select id="totalRecord" resultType="map">
+        select count(post_id) as totalRecord,
+        COUNT(CASE WHEN DATE(write_date) = CURDATE() THEN 1 ELSE NULL END) AS todayRecord
+        from posts
+        where board_cat=#{board_cat}
         <if test="searchWord!=null">
             and ${searchKey} like '%${searchWord}%'
         </if>
     </select>
     <select id="boardPageList" resultType="BoardVO">
-        select post_id, user_id, title, content, views, board_cat, date_format(write_date, '%m-%d %H:%i') as write_date
-        from posts where board_cat=#{board_cat}
-        <if test="searchWord!=null">
-            and ${searchKey} like '%${searchWord}%'
-        </if>
-        order by post_id desc limit ${onePageRecord} offset ${offsetPoint}
+        SELECT p.post_id, p.user_id, p.title, p.content, p.views, p.board_cat,
+        DATE_FORMAT(p.write_date, '%m-%d %H:%i') AS write_date,
+        COUNT(l.user_id) AS likes
+        FROM posts p
+        LEFT JOIN post_like l ON p.post_id = l.post_id
+        WHERE p.board_cat=#{board_cat}
+        <choose>
+            <when test="searchWord!=null and searchKey=='user_id'">
+                AND p.user_id LIKE CONCAT('%', #{searchWord}, '%')
+            </when>
+            <when test="searchWord!=null and searchKey=='title'">
+                AND p.title LIKE CONCAT('%', #{searchWord}, '%')
+            </when>
+            <when test="searchWord!=null and searchKey=='content'">
+                AND p.content LIKE CONCAT('%', #{searchWord}, '%')
+            </when>
+        </choose>
+        GROUP BY p.post_id
+        ORDER BY post_id DESC
+        LIMIT #{onePageRecord} OFFSET #{offsetPoint}
     </select>
+
     <insert id="boardInsert">
         insert into posts(user_id, title, content, board_cat)
         values (#{user_id}, #{title}, #{content}, #{board_cat})
@@ -25,16 +43,21 @@
         where post_id = ${param1};
     </update>
     <select id="boardSelect" resultType="BoardVO">
-        select post_id,
+        SELECT post_id,
                user_id,
                title,
                content,
                views,
                board_cat,
-               date_format(write_date, '%m-%d %H:%i')
-                   as write_date
-        from posts
-        where post_id = #{param1};
+               DATE_FORMAT(write_date, '%m-%d %H:%i') AS write_date,
+               CASE WHEN EXISTS (
+                   SELECT 1
+                   FROM post_like pl
+                   WHERE pl.post_id = posts.post_id
+                     AND pl.user_id = #{param2}
+               ) THEN 1 ELSE 0 END AS myLike
+        FROM posts
+        WHERE post_id = #{param1};
     </select>
     <delete id="boardDelete">
         delete from posts where post_id=#{param1}
@@ -42,6 +65,9 @@
     <update id="boardUpdate">
         update posts set title=#{title}, content=#{content} where post_id = ${post_id};
     </update>
+    <delete id="decreaseLike">
+        delete from post_like where post_id=#{param1} and user_id=#{param2}
+    </delete>
     <insert id="increaseLike">
         insert into post_like(post_id, user_id) values(#{param1}, #{param2})
     </insert>

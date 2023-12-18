@@ -19,6 +19,7 @@ public class PagingVO {
     private String searchWord;
     private String board_cat;
     private String postSort;
+    private int todayRecord;
 
     public void setNowPage(int nowPage) {
         this.nowPage = nowPage;

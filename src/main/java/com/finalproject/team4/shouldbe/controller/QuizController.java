@@ -1,6 +1,7 @@
 package com.finalproject.team4.shouldbe.controller;
 
 import com.finalproject.team4.shouldbe.service.QuizService;
+import com.finalproject.team4.shouldbe.util.TtsUtil;
 import com.finalproject.team4.shouldbe.vo.QuizVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,8 @@ public class QuizController {
         }
         String userId = (String) session.getAttribute("userId");
         QuizVO quiz = quizService.selectRandomQuiz(userId, 1);
+        String path=TtsUtil.APITTS(quiz.getQuiz_content(),quiz.getQuiz_lang());
+        quiz.setQuiz_sound(path);
         System.out.println(quiz);
         ModelAndView modelAndView = new ModelAndView("/quiz/quiz_easy");
         modelAndView.addObject("quiz", quiz);
@@ -95,6 +98,8 @@ public class QuizController {
         }
         String userId = (String) session.getAttribute("userId");
         QuizVO quiz = quizService.selectRandomQuiz(userId, 2);
+        String path=TtsUtil.APITTS(quiz.getQuiz_content(),quiz.getQuiz_lang());
+        quiz.setQuiz_sound(path);
         System.out.println(quiz);
         ModelAndView modelAndView = new ModelAndView("/quiz/quiz_medium");
         modelAndView.addObject("quiz", quiz);
@@ -109,6 +114,8 @@ public class QuizController {
         }
         String userId = (String) session.getAttribute("userId");
         QuizVO quiz = quizService.selectRandomQuiz(userId, 3);
+        String path=TtsUtil.APITTS(quiz.getQuiz_content(),quiz.getQuiz_lang());
+        quiz.setQuiz_sound(path);
         System.out.println(quiz);
         ModelAndView modelAndView = new ModelAndView("/quiz/quiz_hard");
         modelAndView.addObject("quiz", quiz);

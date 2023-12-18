@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Insert title here</title>
+    <title>REGISTER</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -213,12 +213,20 @@
 
         }
 
+        function isCheckedCaptcha(){
+            if(document.getElementById("isCaptchaChecked").value=="Y"){
+                return true;
+            }
+            return false;
+        }
+
         $(function () {
 
             //아이디 변경시 다시 중복검사
             $("#userid").keyup(function () {
                 $("#isIdChecked").val("N");
             });
+
             $("#sendcode").on('click', function () {
 
                 var email = $("#email").val();
@@ -242,6 +250,7 @@
 
                 });
             });
+
             $("#checkcode").click(function () {
                 var code = $("#authenticate").val();
                 $.ajax({
@@ -294,29 +303,33 @@
 
             $("#create_Form").submit(function () {
                 if (!isCheckedId()) {
+                    event.preventDefault();
                     alert("Please run ID duplication check!");
                     return false;
                 }
                 if (!checkpwd()) {//여러가지 체크들
+                    event.preventDefault();
                     alert("Passwords do not match!");
                     return false;
                 }
                 if (!isCheckedEmail()) {
+                    event.preventDefault();
                     alert("Please proceed with email verification!");
                     return false;
                 }
-
                 var terms1Checked = document.getElementById('terms1').checked;
                 var terms2Checked = document.getElementById('terms2').checked;
                 if (!terms1Checked || !terms2Checked) {
+                    event.preventDefault();
                     alert("Agree to the Terms of Use!");
                     return false;
                 }
                 return true;
 
             })
-        });
 
+
+        });
     </script>
 </head>
 <body>
@@ -409,32 +422,32 @@
                 </div>
                 <select name="nation" id="nation" class="select" style="margin-left: 20px">
                     <option disabled selected>국적</option>
-                    <option value="ko">한국</option>
-                    <option value="en">미국</option>
-                    <option value="ja">일본</option>
-                    <option value="zh-CN">중국</option>
-                    <option value="vi">베트남</option>
-                    <option value="th">태국</option>
-                    <option value="id">인도네시아</option>
-                    <option value="fr">프랑스</option>
-                    <option value="es">스페인</option>
-                    <option value="ru">러시아</option>
-                    <option value="de">독일</option>
-                    <option value="it">이탈리아</option>
+                    <option value="ko">KOREA</option>
+                    <option value="en">USA</option>
+                    <option value="ja">JAPAN</option>
+                    <option value="zh-CN">CHINA</option>
+                    <option value="vi">VIETNAM</option>
+                    <option value="th">THAILAND</option>
+                    <option value="id">INDONESIA</option>
+                    <option value="fr">FRANCE</option>
+                    <option value="es">SPAIN</option>
+                    <option value="ru">RUSSIA</option>
+                    <option value="de">GERMANY</option>
+                    <option value="it">ITALY</option>
                 </select>
             </div>
             <div>
                 <div style="margin-top: 17px">
-                    <label>성별</label>
+                    <label>GENDER</label>
                 </div>
                 <div class="col-sm-10">
                     <input type="radio" class="btn-check sex" name="options-outlined sex" id="secondary-outlined-0"
                            autocomplete="off" checked>
-                    <label class="btn btn-outline-secondary" for="secondary-outlined-0" value="0">남자</label>
+                    <label class="btn btn-outline-secondary" for="secondary-outlined-0" value="0">MAN</label>
 
                     <input type="radio" class="btn-check sex" name="options-outlined sex" id="secondary-outlined-1"
                            autocomplete="off">
-                    <label class="btn btn-outline-secondary" for="secondary-outlined-1" value="1">여자</label>
+                    <label class="btn btn-outline-secondary" for="secondary-outlined-1" value="1">WOMAN</label>
                 </div>
             </div>
             <div id="termsCheck">
@@ -459,16 +472,16 @@
                 </div>
                 <div>
                     <label style="cursor: pointer"><input type="checkbox" id="terms1"
-                                                          style="margin-right: 5px; cursor: pointer"/>이용약관 동의<strong>(필수)</strong></label>
+                                                          style="margin-right: 5px; cursor: pointer"/>Agree to Terms of Use<strong>(essential)</strong></label>
                 </div>
                 <div>
                     <label style="cursor: pointer"><input type="checkbox" id="terms2"
-                                                          style="margin-right: 5px; cursor: pointer"/>개인정보 수집 동의<strong>(필수)</strong></label>
+                                                          style="margin-right: 5px; cursor: pointer"/>Consent to collection of personal information<strong>(essential)</strong></label>
                 </div>
             </div>
             <div style="display: flex; align-items: center;">
-                <input type="submit" value="가입하기" id="join" class="btn btn-warning submitBtn"/>
-                <input type="button" value="취소" id="cancel" class="btn btn-warning submitBtn"/>
+                <input type="submit" value="JOIN" id="join" class="btn btn-warning submitBtn"/>
+                <input type="button" value="CANCEL" id="cancel" class="btn btn-warning submitBtn"/>
             </div>
         </form>
     </div>

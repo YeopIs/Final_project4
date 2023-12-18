@@ -13,7 +13,7 @@ public class LoginVO {
     private String salt;
     private String password;
     private String user_name;
-    private Date withdraw;
+    private int withdraw;
     private Date suspended_time;
     private int suspended_period;
 }

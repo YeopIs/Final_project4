@@ -18,4 +18,5 @@ public class QuizVO {
     private String user_answer;
     private List<String> answer_lang;
     private String answer_create_lang;
+    private String quiz_sound;
 }

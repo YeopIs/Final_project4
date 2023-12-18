@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>회원정보수정</title>
+    <title>USER INFO CHANGE</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +53,7 @@
         }
 
         .sidebar-menu li a:hover {
-            background-color: #ddd;
+            background-color: rgba(255, 227, 160, 0.3);
         }
 
         .active {
@@ -75,9 +75,33 @@
         }
     </style>
     <script>
-        function change_image(){
-            window.open("${pageContext.request.contextPath}/mypage/proflieimgChange", "w", "left= -1100px, top=390px,width=400px, height=300px");
-        }
+        $(document).ready(function() {
+            $("#changeimg").click(function() {
+                $("#imgUpload").click();
+            });
+            $("#imgUpload").change(function() {
+                var formData = new FormData();
+                formData.append('filename', this.files[0]);
+
+                $.ajax({
+                    url: "${pageContext.servletContext.contextPath}/mypage/profileimgChangeOk",
+                    type: "post",
+                    data: formData,
+                    async: false,
+                    processData: false, // 필수 옵션
+                    contentType: false, // 필수 옵션
+                    success: function(result) {
+                        console.log(result);
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.log(error.responseText);
+                        document.location.reload();
+                    }
+                });
+            });
+        });
+
         $(function () {
             $("#userEditForm").submit(function(){
                 if($("#pwd").val() == ""){
@@ -89,6 +113,8 @@
                     return false;
                 }
             });
+
+
             var user_id = $("#userid").val();
             $(document).on('click', '#basicimg',function () {
                 event.preventDefault();
@@ -130,11 +156,12 @@
     <div id="sidebar">
         <br/>
         <ul class="sidebar-menu">
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/change_user" class="active">회원정보 수정</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/post_user">작성한글</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/friend_user">친구관리</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/save_chat">저장소</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/withdraw_user">탈퇴하기</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/">USER INFO</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/change_user" class="active">INFO EDIT</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/post_user">POST LIST</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/friend_user">FRIENDS</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/save_chat">STORE</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/withdraw_user">WITHDRAW</a></li>
         </ul>
     </div>
     <div id="content" class="col-10">
@@ -146,38 +173,39 @@
         </div>
 
         <div class="text-center">
-            <button type="button" class="btn btn-warning me-2" id="changeimg" onclick="change_image()">이미지 변경</button>
-            <button type="button" class="btn btn-secondary" id="basicimg">기본 이미지로 변경</button>
+            <button type="button" class="btn btn-warning me-2" id="changeimg" onclick="changeImg()">CHANGE IMAGE</button>
+            <input type="file" id="imgUpload" style="display: none">
+            <button type="button" class="btn btn-secondary" id="basicimg">DEFAULT</button>
         </div>
 
         <form method="post" action="${pageContext.servletContext.contextPath}/mypage/editProfileOk" id="userEditForm">
             <div class="row mb-3 mt-3">
-                <label for="userid" class="col-sm-2 col-form-label">아이디</label>
+                <label for="userid" class="col-sm-2 col-form-label">ID</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="userid" name="user_id" value="${myvo.user_id}">
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="pwd" class="col-sm-2 col-form-label">기존 비밀번호</label>
+                <label for="pwd" class="col-sm-2 col-form-label">NOW PWD</label>
                 <div class="col-sm-10">
                     <input type="password" class="form-control" placeholder="Enter password" name="now_password">
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="pwd" class="col-sm-2 col-form-label">새 비밀번호</label>
+                <label for="pwd" class="col-sm-2 col-form-label">NEW PWD</label>
                 <div class="col-sm-10">
                     <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="pwd-confirm" class="col-sm-2 col-form-label">새 비밀번호 확인</label>
+                <label for="pwd-confirm" class="col-sm-2 col-form-label">NEW PWD CHECK</label>
                 <div class="col-sm-10">
                     <input type="password" class="form-control" id="pwd-confirm" placeholder="Confirm password"
                            name="pwd-confirm">
                 </div>
             </div>
             <div class="row mb-3">
-                <label class="col-sm-2 col-form-label">사용가능언어</label>
+                <label class="col-sm-2 col-form-label">LANGUAGE AVAILABLE</label>
                 <div class="col-sm-10">
                     <input type="checkbox" class="btn-check" name="lang" id="lang-ko" value="ko" autocomplete="off">
                     <label class="btn btn-outline-secondary" for="lang-ko">한국어</label>
@@ -222,14 +250,14 @@
 
             </div>
             <div class="row mb-3">
-                <label for="intro" class="col-sm-2 col-form-label">자기소개</label>
+                <label for="intro" class="col-sm-2 col-form-label">ABOUT ME</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="intro" placeholder="Write introduction"
                            name="profile_content" value="${myvo.profile_content}">
                 </div>
             </div>
             <div class="row">
-                <button type="submit" id="edit" class="btn btn-warning" style="width: auto">수정하기</button>
+                <button type="submit" id="edit" class="btn btn-warning" style="width: auto">EDIT</button>
             </div>
         </form>
     </div>

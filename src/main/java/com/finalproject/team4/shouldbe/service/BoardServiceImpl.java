@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -29,13 +30,13 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public int totalRecord(PagingVO pVO) {
+    public Map<String, Object> totalRecord(PagingVO pVO) {
         return Mapper.totalRecord(pVO);
     }
 
     @Override
-    public BoardVO boardSelect(int post_id) {
-        return Mapper.boardSelect(post_id);
+    public BoardVO boardSelect(int post_id, String userId) {
+        return Mapper.boardSelect(post_id,userId);
     }
 
     @Override
@@ -57,7 +58,10 @@ public class BoardServiceImpl implements BoardService {
     public int increaseLike(int post_id, String user_id) {
        return Mapper.increaseLike(post_id, user_id);
     }
-
+    @Override
+    public void decreaseLike(int post_id, String user_id) {
+        Mapper.decreaseLike(post_id, user_id);
+    }
     @Override
     public int getLikeStatus(int post_id, String user_id) {
         return Mapper.getLikeStatus(post_id, user_id);

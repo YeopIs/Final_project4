@@ -38,8 +38,15 @@ public class BoardController {
         var boardCat = parseCategory(request.getRequestURI());
         //board category setting
         pVO.setBoard_cat(boardCat);
+        Map<String, Object> recordResult = boardService.totalRecord(pVO);
+        Long totalRecordLong = (Long) recordResult.get("totalRecord");
+        Long todayRecordLong = (Long) recordResult.get("todayRecord");
+        int totalRecord = totalRecordLong.intValue();
+        int todayRecord = todayRecordLong.intValue();
+        System.out.println(todayRecord+" "+totalRecord);
         //총레코드 수
-        pVO.setTotalRecord(boardService.totalRecord(pVO));
+        pVO.setTodayRecord(todayRecord);
+        pVO.setTotalRecord(totalRecord);
         //DB선택(page, 검색)
         List<BoardVO> list = boardService.boardPageList(pVO);
         mav.addObject("list", list);
@@ -73,10 +80,14 @@ public class BoardController {
 
     }
 
-
     @GetMapping({"/board/free/view", "board/notice/view", "board/inquiries/view"})
     public ModelAndView view(int no, String searchKey, String searchWord, HttpServletRequest request) {
         var cat = parseCategory(request.getRequestURI());
+        HttpSession session = request.getSession();
+        String userId = (String) session.getAttribute("logId");
+        if (userId == null || userId.isEmpty()) {
+            userId = "not_login";
+        }
         String listUrl;
         if (searchKey != null && !searchKey.isEmpty()) {
             listUrl = "/board/" + cat + "?searchKey=" + searchKey + "&searchWord=" + searchWord;
@@ -89,9 +100,10 @@ public class BoardController {
             boardService.viewCount(no);
 
             //게시글 데이터
-            var bVO = boardService.boardSelect(no);
+            var bVO = boardService.boardSelect(no,userId);
             bVO.setTitle(HtmlUtils.htmlUnescape(bVO.getTitle()));
             bVO.setContent(HtmlUtils.htmlUnescape(bVO.getContent()));
+            System.out.println(bVO);
             mav.setViewName("/board/board_view");
             mav.addObject("bVO", bVO);
             mav.addObject("listUrl", listUrl);
@@ -108,7 +120,8 @@ public class BoardController {
     @GetMapping({"/board/free/edit", "/board/notice/edit", "/board/inquiries/edit"})
     public ModelAndView edit(int no, HttpSession session) {
         ModelAndView mav = new ModelAndView();
-        var vo = boardService.boardSelect(no);
+        String userId = (String) session.getAttribute("logId");
+        var vo = boardService.boardSelect(no, userId);
         //작성자 맞는지 체크
         if (vo.getUser_id().equals(session.getAttribute("logId"))) {
             vo.setTitle(HtmlUtils.htmlUnescape(vo.getTitle()));
@@ -144,7 +157,7 @@ public class BoardController {
         var id = (String) session.getAttribute("logId");
 
         //작성자 일치하면
-        if (id.equals(boardService.boardSelect(no).getUser_id())) {
+        if (id.equals(boardService.boardSelect(no, id).getUser_id())) {
             //삭제성공
             boardService.boardDelete(no);
             mav.setViewName("redirect:/board/" + cat);
@@ -167,14 +180,16 @@ public class BoardController {
         var map = new HashMap<String, Object>();
         int result = boardService.getLikeStatus(no, user_id);
         if (result > 0) {
+            boardService.decreaseLike(no,user_id);
             map.put("result", false);
-            map.put("msg", "이미 추천한 글입니다.");
+            map.put("msg", "추천을 취소합니다!");
             return map;
         }
         try {
             result = boardService.increaseLike(no, user_id);
             if (result > 0) {
                 map.put("result", true);
+                map.put("msg", "게시글을 추천합니다!");
                 return map;
             }
             map.put("result", false);

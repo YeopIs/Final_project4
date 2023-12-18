@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>should be</title>
+    <title>BLOCKLIST</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -26,7 +26,7 @@
 
         #content {
             padding: 20px;
-            width: 80%;
+            width: 70%;
         }
 
         .sidebar-menu {
@@ -43,7 +43,7 @@
         }
 
         .sidebar-menu li a:hover {
-            background-color: #ddd;
+            background-color: rgba(255, 227, 160, 0.3);
         }
 
         .active {
@@ -131,20 +131,21 @@
     <div id="sidebar">
         <br/>
         <ul class="sidebar-menu">
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/change_user">회원정보 수정</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/post_user">작성한글</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/friend_user" class="active">친구관리</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/save_chat">저장소</a></li>
-            <li><a href="${pageContext.servletContext.contextPath}/mypage/withdraw_user">탈퇴하기</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/">USER INFO</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/change_user">INFO EDIT</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/post_user">POST LIST</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/friend_user" class="active">FRIENDS</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/save_chat">STORE</a></li>
+            <li><a href="${pageContext.servletContext.contextPath}/mypage/withdraw_user">WITHDRAW</a></li>
         </ul>
     </div>
     <div id="content" class="col-10">
         <ul class="list-inline">
             <li class="list-inline-item">
-                <a href="${pageContext.servletContext.contextPath}/mypage/friend_user">친구 목록</a>
+                <a href="${pageContext.servletContext.contextPath}/mypage/friend_user">FRIENDS</a>
             </li>
             <li class="list-inline-item">
-                <a href="${pageContext.servletContext.contextPath}/mypage/blocklist" id="now">차단 목록</a>
+                <a href="${pageContext.servletContext.contextPath}/mypage/blocklist" id="now">BLOCK LIST</a>
             </li>
         </ul>
         <c:forEach var="blist" items="${blist}">
@@ -160,7 +161,7 @@
                 </div>
                 <div>
                     <button type="button" class="btn btn-outline-secondary btn-action" id="unlock"
-                            title="${blist.user_id}">차단해제
+                            title="${blist.user_id}">DELETE
                     </button>
                 </div>
             </div>
